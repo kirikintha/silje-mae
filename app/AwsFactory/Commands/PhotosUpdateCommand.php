@@ -16,10 +16,10 @@ use AwsFactory\Clients\AwsS3ClientInterface;
 
 class PhotosUpdateCommand extends Command {
 
-    private $access_key = '';
-    private $secret = '';
-    private $menuItems = array();
-    private $photoThumbnails = array();
+    private $access_key;
+    private $secret;
+    private $menuItems;
+    private $photoThumbnails;
     private $s3;
 
     /**
@@ -75,8 +75,6 @@ class PhotosUpdateCommand extends Command {
     }
 
     private function photoUpdate() {
-        \Cache::forget('photoMenuItems');
-        \Cache::forget('photoThumbnails');
         //Just make the API here, no need to get fancy.
         $this->s3->request = array(
             'access_key' => \Crypt::encrypt($this->access_key),
@@ -109,9 +107,6 @@ class PhotosUpdateCommand extends Command {
                     unset($object);
                 }
             }
-            //Cache Items.
-            \Cache::forever('photoMenuItems', $this->menuItems);
-            \Cache::forever('photoThumbnails', $this->photoThumbnails);
             $progress->finish();
             //Show how many records we imported.
             $this->info(sprintf("\nFinished importing %d photos", $this->s3->total));
@@ -122,11 +117,15 @@ class PhotosUpdateCommand extends Command {
     private function setMenuItem($key = null) {
         if (!preg_match('/\.(jpg|jpeg|bpm|mov|png|gif|mp4)$/i', $key)) {
             $notated = str_replace('/', '.children.', rtrim(ltrim($key, '/'), '/'));
+            $this->menuItems = \Cache::get('photoMenuItems', array());
             array_set($this->menuItems, $notated, array(
                 'path' => rtrim($key, '/'),
                 'name' => basename($key)
             ));
             unset($notated);
+            \Cache::forget('photoMenuItems');
+            \Cache::forever('photoMenuItems', $this->menuItems);
+            unset($this->menuItems);
         }
     }
 
@@ -152,30 +151,36 @@ class PhotosUpdateCommand extends Command {
                     ));
                     $uri = $result['Body']->getUri();
                     //Make Thumbnails.
-                    \Image::make($uri)
-                            ->fit(242, 200)
-                            ->save($dir . $file_name, 80)
-                            ->destroy();
+                    $img = \Image::make($uri);
+                    $img->fit(242, 200);
+                    $img->save($dir . $file_name, 80);
+                    $img->destroy();
+                    unset($img);
                     if (!File::exists($greyscale . $file_name)) {
-                        \Image::make($uri)
-                                ->greyscale()
-                                ->fit(242, 200)
-                                ->save($greyscale . $file_name, 80)
-                                ->destroy();
+                        $img = \Image::make($uri);
+                        $img->greyscale();
+                        $img->fit(242, 200);
+                        $img->save($greyscale . $file_name, 80);
+                        $img->destroy();
+                        unset($img);
                     }
                     //Delete tmp file.
                     File::delete($tmp);
                     $this->s3->total ++;
-                    unset($result);
                 }
                 //Add To Tumbnails array.
                 $notated = str_replace('/', '.', rtrim($key, '.' . $extension));
+                $this->photoThumbnails = \Cache::get('photoThumbnails', array());
                 array_set($this->photoThumbnails, $notated, array(
                     'key' => $key,
                     'file_name' => $file_name
                 ));
+                \Cache::forget('photoThumbnails');
+                \Cache::forever('photoThumbnails', $this->photoThumbnails);
+                unset($this->photoThumbnails);
             }
         }
+        unset($dir, $greyscale, $result);
         unset($key, $size, $extension, $file_name, $uri, $notated);
     }
 
