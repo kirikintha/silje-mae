@@ -1,0 +1,13 @@
+{
+  "name": "Silje Mae",
+  "dependencies": {
+    "angular": "1.4.0-rc.2",
+    "angular-animate": "1.4.0-rc.2",
+    "angular-route": "1.4.0-rc.2",
+    "angular-resource": "1.4.0-rc.2",
+    "jquery": "~2.1.4",
+    "dotjem-angular-tree": "~0.1.4",
+    "ng-lodash": "~0.2.3",
+    "bootstrap": "~3.3.4"
+  }
+}

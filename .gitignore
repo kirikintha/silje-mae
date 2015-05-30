@@ -1,0 +1,51 @@
+#Composer Ignores
+/bootstrap/compiled.php
+/vendor
+composer.phar
+composer.lock
+.env.*.php
+.env.php
+
+#Bower Ignore
+/bower_components
+/node_modules
+
+#Main Ignore
+.DS_Store
+/tags
+*.komodoproject
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+
+# Packages
+*.7z
+*.dmg
+*.gz
+*.sql
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Logs
+*.log
+
+# documentation - should be generated as-needed in integration environment
+debug.txt
+
+#Development Config Files
+/app/config/local/*
+/app/config/dev/*
+/app/config/local*/*
+/app/config/dev*/*
+
+#Uploaded Files
+/public/files/*
+
+#Ignore End

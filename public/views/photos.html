@@ -1,0 +1,27 @@
+<div class="photos">
+    <div class="col-sm-3">
+        <ul class="nav nav-pills nav-stacked" dx-start-with="menus">
+            <li role="presentation" ng-class="{'active':node.path == path}" ng-repeat="node in $dxPrior">
+                <a href="photos/{{node.path}}">{{node.name}}</a>
+                <ul class="nav" dx-connect="node.children"/>
+            </li>
+        </ul>
+    </div>
+    <div class="view col-sm-9">
+        <h4>{{breadcrumb(path)}}</h4>
+        <div class="row">
+            <loading></loading>
+            <div ng-repeat="(key, item) in photos track by $index" class="col-sm-6 col-md-4 repeat-animate photo">
+                <div ng-show="item.title !== undefined" class="thumbnail">
+                    <a href="photos/{{item.path}}">
+                        <h5>{{item.title}}</h5>
+                        <img src="/files/thumbnails/{{item.file_name}}" />
+                    </a>
+                </div>
+                <div ng-show="item.title == undefined" class="thumbnail">
+                    <img src="/files/thumbnails/{{item.file_name}}" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

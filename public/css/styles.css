@@ -1,0 +1,58 @@
+html{
+    height: 100%;
+}
+body {
+    min-height: 100%;
+}
+
+body > .container {
+    margin-top: 65px;
+}
+
+div.loader {
+    margin-top: 100px;
+}
+
+#smiling-bean {
+    height: 300px;
+    position: fixed;
+    right: -40px;
+    top: -26px;
+    width: 300px;
+    z-index: 9999;
+}
+
+#smiling-bean img {
+    height: auto;
+    position: fixed;
+    right: -17px;
+    top: 7px;
+    width: 235px;
+    z-index: 9999;
+}
+
+#bunny-bean {
+    bottom: -26px;
+    height: 250px;
+    left: 0;
+    position: fixed;
+    width: 50%;
+    z-index: 9999;
+}
+
+#bunny-bean img {
+    left: 0;
+    position: absolute;
+    bottom: -10px;
+    width: inherit;
+    height: auto;
+}
+
+ul.nav li > ul {
+    margin-left: 15px;
+}
+
+.photo {
+    min-width: 242px;
+    min-height: 200px;
+}
