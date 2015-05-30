@@ -198,6 +198,20 @@ class AwsS3Client extends AwsClients implements AwsS3ClientInterface {
     }
 
     /**
+     * Test if an object exists.
+     * @param type $bucket
+     * @param type $key
+     * @return type
+     */
+    public function objectExists($bucket = null, $key = null) {
+        try {
+            return $this->client->doesObjectExist($bucket, $key);
+        } catch (\Aws\S3\Exception\S3Exception $ex) {
+            \Session::flash('danger', 'Oobject Exists: ' . $ex->getMessage());
+        }
+    }
+
+    /**
      * Shorthand for client iterator, allows us an abstract way of making a callback
      *  with an iterator.
      * @param type $command
@@ -260,6 +274,19 @@ class AwsS3Client extends AwsClients implements AwsS3ClientInterface {
     public function getBucketAcl($variables = array()) {
         try {
             return $this->client->getBucketAcl($variables);
+        } catch (\Aws\S3\Exception\S3Exception $ex) {
+            \Session::flash('danger', 'Bucket ACL: ' . $ex->getMessage());
+        }
+    }
+
+    /**
+     * Put an object to S3
+     * @param type $variables
+     * @return type
+     */
+    public function put($variables = array()) {
+        try {
+            return $this->client->putObject($variables);
         } catch (\Aws\S3\Exception\S3Exception $ex) {
             \Session::flash('danger', 'Bucket ACL: ' . $ex->getMessage());
         }
