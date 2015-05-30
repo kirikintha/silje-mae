@@ -86,6 +86,8 @@ class PhotosUpdateCommand extends Command {
         );
         $this->s3->testConnection();
         if ($this->s3->response['connected'] === true) {
+            //Tell us how many photos we found.
+            $this->info(sprintf('Found %d photos in this bucket', $this->s3->count));
             $progress = new ProgressBar($this->output, $this->s3->count);
             $progress->start();
             $i = 0;
