@@ -106,6 +106,7 @@ class PhotosUpdateCommand extends Command {
                     }
                     // advance the progress bar 1 unit.
                     $progress->advance();
+                    unset($object);
                 }
             }
             //Cache Items.
@@ -125,6 +126,7 @@ class PhotosUpdateCommand extends Command {
                 'path' => rtrim($key, '/'),
                 'name' => basename($key)
             ));
+            unset($notated);
         }
     }
 
@@ -162,6 +164,7 @@ class PhotosUpdateCommand extends Command {
                     //Delete tmp file.
                     File::delete($tmp);
                     $this->s3->total ++;
+                    unset($result);
                 }
                 //Add To Tumbnails array.
                 $notated = str_replace('/', '.', rtrim($key, '.' . $extension));
@@ -171,6 +174,7 @@ class PhotosUpdateCommand extends Command {
                 ));
             }
         }
+        unset($key, $size, $extension, $file_name, $uri, $notated);
     }
 
 }
