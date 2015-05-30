@@ -39,6 +39,9 @@ class PhotosUpdateCommand extends Command {
 
     public function __construct(AwsS3ClientInterface $s3) {
         parent::__construct();
+        //Set ini for 256MB
+        ini_set('memory_limit', '256M');
+        //Set vars
         $this->s3 = $s3;
         $this->access_key = \Config::get('app.access_key');
         $this->secret = \Config::get('app.secret');
@@ -90,24 +93,30 @@ class PhotosUpdateCommand extends Command {
             $this->s3->listObjects();
             //Tell us how many photos we found.
             $this->info(sprintf('Found %d photos in this bucket', $this->s3->count));
-            if ($this->s3->count > 0) {
-                $progress = new ProgressBar($this->output, $this->s3->count);
-                $progress->setFormat(' %current%/%max% [%bar%] %percent:3s%% %elapsed:6s%/%estimated:-6s% %memory:6s%');
-                $progress->start();
-                $i = 0;
-                while ($i++ < $this->s3->count) {
-                    $object = $this->s3->objects->current();
-                    $this->s3->objects->next();
-                    if (!empty($object)) {
-                        //Look for a menu item.
+            //Update images.
+            $this->update();
+        }
+    }
+
+    //Update images.
+    private function update() {
+        if ($this->s3->count > 0) {
+            $progress = new ProgressBar($this->output, $this->s3->count);
+            $progress->setFormat(' %current%/%max% [%bar%] %percent:3s%% %elapsed:6s%/%estimated:-6s% %memory:6s%');
+            $progress->start();
+            $i = 0;
+            while ($i++ < $this->s3->count) {
+                $object = $this->s3->objects->current();
+                $this->s3->objects->next();
+                if (!empty($object)) {
+                    //Look for a menu item.
 //                        $this->setMenuItem($object['Key']);
-                        //Look for images, and create thumbnails.
-                        $this->createImages($object);
-                    }
-                    // advance the progress bar 1 unit.
-                    $progress->advance();
-                    unset($object);
+                    //Look for images, and create thumbnails.
+                    $this->createImages($object);
                 }
+                // advance the progress bar 1 unit.
+                $progress->advance();
+                unset($object);
             }
             //Kill all caches, so they run on the next page load.
             \Cache::forget('thumbnails');
@@ -131,6 +140,7 @@ class PhotosUpdateCommand extends Command {
                 //Make images.
                 $this->makeImages($key, $file_name);
             }
+            unset($exists, $extension, $file_name);
         }
     }
 
@@ -160,7 +170,9 @@ class PhotosUpdateCommand extends Command {
             'Key' => $key,
             'SaveAs' => $saveAs,
         ));
-        return $result['Body']->getUri();
+        $uri = $result['Body']->getUri();
+        unset($result);
+        return $uri;
     }
 
     //Creat Thumnail
@@ -171,7 +183,7 @@ class PhotosUpdateCommand extends Command {
         $key = sprintf('thumbnails/%s', $file_name);
         $this->makeImageFit($key, $uri, $file_name, 242, 200);
     }
-    
+
     //Make a full sized image.
     private function makeFull($uri, $file_name) {
         $key = sprintf('full/%s', $file_name);
@@ -195,6 +207,7 @@ class PhotosUpdateCommand extends Command {
         ));
         //Delete temp File.
         File::delete($saveAs);
+        unset($img);
     }
 
     //Cache thumbnails, into their directory structure.
