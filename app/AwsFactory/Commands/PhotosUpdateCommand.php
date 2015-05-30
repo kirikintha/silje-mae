@@ -18,10 +18,14 @@ class PhotosUpdateCommand extends Command {
 
     private $access_key;
     private $secret;
-    private $menus;
-    private $thumbnails;
+    private $bucket;
+    private $prefix;
     private $s3;
     private $tmp = '/tmp';
+    private $caches = array(
+        'thumbnails',
+        'menus'
+    );
 
     /**
      * The console command name.
@@ -43,8 +47,11 @@ class PhotosUpdateCommand extends Command {
         ini_set('memory_limit', '256M');
         //Set vars
         $this->s3 = $s3;
+        //@TODO - let's move this back into the client.
         $this->access_key = \Config::get('app.access_key');
         $this->secret = \Config::get('app.secret');
+        $this->bucket = \Config::get('app.bucket');
+        $this->prefix = \Config::get('app.prefix');
     }
 
     /**
@@ -84,8 +91,8 @@ class PhotosUpdateCommand extends Command {
             'access_key' => \Crypt::encrypt($this->access_key),
             'secret' => \Crypt::encrypt($this->secret),
             'region' => \Aws\Common\Enum\Region::US_EAST_1,
-            'bucket' => 'silje-mae',
-            'prefix' => 'master',
+            'bucket' => $this->bucket,
+            'prefix' => $this->prefix,
         );
         $this->s3->testConnection();
         if ($this->s3->response['connected'] === true) {
@@ -118,13 +125,20 @@ class PhotosUpdateCommand extends Command {
                 $progress->advance();
                 unset($object);
             }
-            //Kill all caches, so they run on the next page load.
-            \Cache::forget('thumbnails');
             //Finish.
             $progress->finish();
             //Show how many records we imported.
             $this->info(sprintf("\nFinished importing %d photos", $this->s3->total));
+            //Post Update.
+            $this->postUpdate();
         }
+    }
+
+    //Kill the cache, and re-prime the photos url.
+    private function postUpdate() {
+        $this->info('Import finished, cleaning up.');
+        $this->killCache();
+        $this->prime();
     }
 
     //Set thumbnail.
@@ -210,39 +224,30 @@ class PhotosUpdateCommand extends Command {
         unset($img);
     }
 
-    //Cache thumbnails, into their directory structure.
-    //@TODO - we are moving this over to the photo controller, so that
-    // We pull the latest directory info and cache it. This will stop us from 
-    // having to re-load this, and get new info on the fly.
-    private function cacheThumbnails($key, $extension, $file_name) {
-        //Add To Tumbnails array.
-        $notated = str_replace('/', '.', rtrim($key, '.' . $extension));
-        $this->thumbnails = \Cache::get('thumbnails', array());
-        array_set($this->thumbnails, $notated, array(
-            'key' => $key,
-            'file_name' => $file_name
-        ));
-        \Cache::forever('thumbnails', $this->thumbnails);
-        unset($this->thumbnails, $notated, $key, $extension, $file_name);
+    //Kill all caches.
+    private function killCache() {
+        $this->info('Killing Cache');
+        //Kill all caches, so they run on the next page load.
+        foreach ($this->caches as $cache) {
+            \Cache::forget($cache);
+        }
     }
 
-    //Set Menu Item.
-    //@TODO - move this into the menu controller, and make an active connection to
-    // AWS when needed.
-    private function setMenuItem($key = null) {
-        if (!preg_match('/\.(jpg|jpeg|bpm|mov|png|gif|mp4)$/i', $key)) {
-            $notated = str_replace('/', '.children.', rtrim(ltrim($key, '/'), '/'));
-            $this->menus = \Cache::get('menus', array());
-            array_set($this->menus, $notated, array(
-                'path' => rtrim($key, '/'),
-                'name' => basename($key)
-            ));
-            unset($notated);
-
-            \Cache::forget('menus');
-            \Cache::forever('menus', $this->menus);
-            unset($this->menus);
+    //Prime the cache.
+    private function prime() {
+        $url = \Config::get('app.url') . '/photos';
+        $this->info(sprintf('Priming Cache on: ' . $url));
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_URL => $url
+        ));
+        curl_exec($curl);
+        if (curl_errno($curl)) {
+            $this->error(curl_error($curl));
         }
+        curl_close($curl);
+        $this->info('Cache prime complete.');
     }
 
 }
