@@ -154,12 +154,14 @@ class PhotosUpdateCommand extends Command {
                     //Make Thumbnails.
                     \Image::make($uri)
                             ->fit(242, 200)
-                            ->save($dir . $file_name, 80);
+                            ->save($dir . $file_name, 80)
+                            ->destroy();
                     if (!File::exists($greyscale . $file_name)) {
                         \Image::make($uri)
                                 ->greyscale()
                                 ->fit(242, 200)
-                                ->save($greyscale . $file_name, 80);
+                                ->save($greyscale . $file_name, 80)
+                                ->destroy();
                     }
                     //Delete tmp file.
                     File::delete($tmp);
