@@ -113,7 +113,7 @@ class PhotoController extends \BaseController {
                 $rand = array_rand($item);
                 $child = array_rand($item[$rand]);
                 $items[$key] = array(
-                    'path' => $path . '/' . $key,
+                    'path' => $path . $key,
                     'title' => ltrim(rtrim($key, '/'), '/'),
                     'file_name' => $item[$rand][$child]['file_name'],
                 );

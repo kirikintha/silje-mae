@@ -126,6 +126,7 @@ PhotoApp.controller('PhotoCtrl', ['$scope', '$timeout', '$http', '$routeParams',
         $scope.loading = true;
         $scope.dataLoaded = false;
         $scope.total = 0;
+        //Timeout Loading.
         $timeout(function () {
             $http.get(path, {cache: true})
                     .success(function (data) {
@@ -135,6 +136,7 @@ PhotoApp.controller('PhotoCtrl', ['$scope', '$timeout', '$http', '$routeParams',
                         $scope.total = _.size(data);
                     });
         }, 1000);
+        //Image urls.
         $scope.image = {
           base: 'https://s3.amazonaws.com/silje-mae/',
           thumbnail: function (file_name) {
@@ -143,5 +145,9 @@ PhotoApp.controller('PhotoCtrl', ['$scope', '$timeout', '$http', '$routeParams',
           full: function (file_name) {
               return this.base + 'full/' + file_name
           }  
+        };
+        //Links.
+        $scope.link = function (path) {
+            return 'photos/' + path + '?layout=' + $scope.layout;
         };
     }]);
