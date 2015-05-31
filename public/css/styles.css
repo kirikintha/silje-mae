@@ -56,3 +56,36 @@ ul.nav li > ul {
     min-width: 242px;
     min-height: 200px;
 }
+
+.slick-prev::before, .slick-next::before {
+    color: #98978b !important;
+}
+
+.slick-slide img {
+    width: inherit;
+}
+
+.slider-nav img {
+    -ms-transform: scale(0.85); /* IE 9 */
+    -webkit-transform: scale(0.85); /* Safari */
+    transform: scale(0.85);
+}
+
+.slider-nav .slick-center img {
+    width: inherit;
+    -ms-transform: scale(1); /* IE 9 */
+    -webkit-transform: scale(1); /* Safari */
+    transform: scale(1);
+}
+
+.slider-nav .slick-slide {
+    width: 100px;
+}
+
+.slider-for {
+    margin-bottom: 0px !important;
+}
+
+#layout-controls blockquote {
+    margin-bottom: 0;
+}

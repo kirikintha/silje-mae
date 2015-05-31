@@ -11,7 +11,6 @@ class PhotoController extends \BaseController {
     private $bucket;
     private $prefix;
     private $s3;
-    private $base = 'https://s3.amazonaws.com';
 
     public function __construct(AwsS3ClientInterface $s3) {
         parent::__construct();
@@ -62,7 +61,6 @@ class PhotoController extends \BaseController {
                     $key = $object['Key'];
                     $extension = File::extension($key);
                     $file_name = str_replace('"', '', $object['ETag']) . '.' . $extension;
-                    $file_name = sprintf('%s/%s/thumbnails/%s', $this->base, $this->bucket, $file_name);
                     $this->setThumbnails($key, $extension, $file_name);
                 }
                 unset($object);

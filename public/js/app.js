@@ -4,7 +4,8 @@
  * and open the template in the editor.
  */
 
-var PhotoApp = angular.module('PhotoApp', ['ngRoute', 'ngAnimate', 'ngLodash', 'dotjem.angular.tree']);
+var dependencies = ['ngRoute', 'ngAnimate', 'ngLodash', 'dotjem.angular.tree', 'slick'];
+var PhotoApp = angular.module('PhotoApp', dependencies);
 
 //Include lodash as factory, with underscore.
 PhotoApp.factory('_', ['lodash',
@@ -108,6 +109,7 @@ PhotoApp.controller('HomeCtrl', ['$scope', '$routeParams',
 
 PhotoApp.controller('PhotoCtrl', ['$scope', '$timeout', '$http', '$routeParams', '_', 'menus', 'Photos',
     function ($scope, $timeout, $http, $routeParams, _, menus, Photos) {
+        $scope.layout = _.isUndefined($routeParams.layout) ? 'tile' : $routeParams.layout;
         $scope.menus = menus.data;
         $scope.photos = [];
         //Make breacrumb.
@@ -122,11 +124,24 @@ PhotoApp.controller('PhotoCtrl', ['$scope', '$timeout', '$http', '$routeParams',
         var path = _.isUndefined($routeParams.path) ? '/api/photos' : '/api/photos/' + $routeParams.path;
         //Get Photos.
         $scope.loading = true;
+        $scope.dataLoaded = false;
+        $scope.total = 0;
         $timeout(function () {
             $http.get(path, {cache: true})
                     .success(function (data) {
                         $scope.loading = false;
                         $scope.photos = data;
+                        $scope.dataLoaded = true;
+                        $scope.total = _.size(data);
                     });
         }, 1000);
+        $scope.image = {
+          base: 'https://s3.amazonaws.com/silje-mae/',
+          thumbnail: function (file_name) {
+              return this.base + 'thumbnails/' + file_name
+          },
+          full: function (file_name) {
+              return this.base + 'full/' + file_name
+          }  
+        };
     }]);

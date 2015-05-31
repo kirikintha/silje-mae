@@ -8,7 +8,5 @@
 
     <title>Silje Mae{{{ isset($pageTitle) ? ' - ' . $pageTitle : '' }}}</title>
 
-    <link href="/css/sandstone.bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
     @yield('styles')
 </head>

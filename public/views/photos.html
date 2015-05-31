@@ -1,6 +1,5 @@
 <div class="photos">
     <div class="col-sm-3">
-        {{ path }}
         <ul class="nav nav-pills nav-stacked" dx-start-with="menus">
             <li role="presentation" ng-class="{'active' : node.path == path}" ng-repeat="node in $dxPrior">
                 <a href="photos/{{node.path}}">{{node.name}}</a>
@@ -9,20 +8,72 @@
         </ul>
     </div>
     <div class="view col-sm-9">
+        <div id="layout-controls" class="pull-right">
+            <a href="photos/{{path}}?layout=tile" class="btn btn-xs btn-info" ng-class="{'active' : layout == 'tile'}">Tile <span class="glyphicon glyphicon-th"></span></a>
+            <a href="photos/{{path}}?layout=list" class="btn btn-xs btn-info" ng-class="{'active' : layout == 'list'}">List <span class="glyphicon glyphicon-th-list"></span></a>
+            <a ng-if="total >= 3 || layout === 'carousel'" href="photos/{{path}}?layout=carousel" class="btn btn-xs btn-info" ng-class="{'active' : layou == 'carousel'}">Carousel <span class="glyphicon glyphicon-picture"></span></a>
+        </div>
         <h4>{{breadcrumb(path)}}</h4>
         <div class="row">
             <loading></loading>
-            <div ng-repeat="(key, item) in photos track by $index" class="col-sm-6 col-md-4 repeat-animate photo">
+            <!--Tile Layout-->
+            <div ng-if="layout === 'tile'" ng-repeat="item in photos track by $index" class="col-md-4 repeat-animate tile">
                 <div ng-show="item.title !== undefined" class="thumbnail">
                     <a href="photos/{{item.path}}">
                         <h5>{{item.title}}</h5>
-                        <img class="img-responsive" src="{{item.file_name}}" />
+                        <img class="img-responsive" ng-src="{{image.thumbnail(item.file_name)}}" />
                     </a>
                 </div>
                 <div ng-show="item.title == undefined" class="thumbnail">
-                    <img class="img-responsive" src="{{item.file_name}}" />
+                    <img class="img-responsive" ng-src="{{image.thumbnail(item.file_name)}}" />
                 </div>
             </div>
+            <!--List Layout-->
+            <div ng-if="layout === 'list'" ng-repeat="item in photos track by $index" class="col-md-12 repeat-animate list">
+                <div ng-show="item.title !== undefined" class="thumbnail">
+                    <a href="photos/{{item.path}}">
+                        <h5>{{item.title}}</h5>
+                        <img class="img-responsive center-block" ng-src="{{image.full(item.file_name)}}" />
+                    </a>
+                </div>
+                <div ng-show="item.title == undefined" class="well well-sm">
+                    <img class="img-responsive center-block" ng-src="{{image.full(item.file_name)}}" />
+                </div>
+            </div>
+            <!--Carousel layout-->
+            <div ng-if="layout === 'carousel'" class="col-md-12 carousel">
+                <!--Slider Nav-->
+                <slick class="ng-slick slider-nav" ng-if="dataLoaded" 
+                       init-onload="false" 
+                       data="dataLoaded" 
+                       infinite="true" 
+                       lazy-load="progressive"
+                       slides-to-show="3"
+                       slides-to-scroll="1"
+                       center-mode="true"
+                       focus-on-select="true"
+                       variable-width="true"
+                       as-nav-for=".slider-for">
+                    <div ng-repeat="item in photos track by $index">
+                        <img class="image-responsive" data-lazy="{{image.thumbnail(item.file_name)}}" />
+                    </div>
+                </slick>
+                <!--Slider For-->
+                <slick class="ng-slick slider-for" ng-if="dataLoaded" 
+                       init-onload="false" 
+                       data="dataLoaded" 
+                       lazy-load="progressive"
+                       slides-to-show="1"
+                       slides-to-scroll="1"
+                       arrows="false"
+                       fade="true"
+                       as-nav-for=".slider-nav">
+                    <div ng-repeat="item in photos track by $index">
+                        <img class="image-responsive" data-lazy="{{image.full(item.file_name)}}" />
+                    </div>
+                </slick>
+            </div>
+            <!--End Layouts-->
         </div>
     </div>
 </div>
