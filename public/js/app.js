@@ -112,10 +112,10 @@ PhotoApp.controller('MainCtrl', ['$scope', '$route', '$routeParams', '$location'
         };
         //Look for active menu.
         this.checkNavActive = function (modifier) {
-          var path = $location.path();
-          var pattern = '^\/' + modifier;  
-          var regex = new RegExp(pattern, 'ig');
-          return (regex.test(path) === true) ? 'active' : '';
+            var path = $location.path();
+            var pattern = '^\/' + modifier;
+            var regex = new RegExp(pattern, 'ig');
+            return (regex.test(path) === true) ? 'active' : '';
         };
     }]);
 
@@ -132,10 +132,15 @@ PhotoApp.controller('HomeCtrl', ['$scope', '$routeParams',
 //@TODO - clean me up.
 PhotoApp.controller('PhotoCtrl', ['$scope', '$http', '$routeParams', '_', 'menus', 'detect',
     function ($scope, $http, $routeParams, _, menus, detect) {
-        $scope.detect = detect.data;
-        $scope.layout = _.isUndefined($routeParams.layout) ? 'tile' : $routeParams.layout;
+        //Reset vars
         $scope.menus = menus.data;
         $scope.photos = [];
+        $scope.detect = detect.data;
+        //Set layout.
+        $scope.layout = _.isUndefined($routeParams.layout) ? 'tile' : $routeParams.layout;
+        if ($scope.detect.isMobile === true) {
+            $scope.layout = 'carousel';
+        }
         //Make breacrumb.
         $scope.path = _.isUndefined($routeParams.path) ? '' : $routeParams.path;
         //Look for photos path.
