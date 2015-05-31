@@ -155,18 +155,18 @@ PhotoApp.controller('PhotoCtrl', ['$scope', '$http', '$routeParams', '_', 'menus
         //Load Photos
         $http.get(path, {cache: true})
                 .success(function (data) {
+                    $scope.total = _.size(data);
+                    //Look at results to define mobile scope.
+                    if ($scope.detect.isMobile === true && $scope.total > 1) {
+                        //Go to carousel, for anything other than one photo result.
+                        $scope.layout = 'carousel';
+                    } else {
+                        $scope.layout = 'tile';
+                    }
                     $scope.loading = false;
                     $scope.photos = data;
                     $scope.dataLoaded = true;
-                    $scope.total = _.size(data);
                 });
-        //Look at results to define mobile scope.
-        if ($scope.detect.isMobile === true && $scope.total > 1) {
-            //Go to carousel, for anything other than one photo result.
-            $scope.layout = 'carousel';
-        } else {
-            $scope.layout = 'tile';
-        }
         //Image urls.
         $scope.image = {
             base: 'https://s3.amazonaws.com/silje-mae/',
