@@ -11,7 +11,7 @@
         <div id="layout-controls" class="pull-right">
             <a ng-if="detect.isMobile === false" ng-href="photos/{{path}}?layout=tile" class="btn btn-xs btn-info" ng-class="{'active' : layout == 'tile'}">Tile <span class="glyphicon glyphicon-th"></span></a>
             <a ng-if="detect.isMobile === false" ng-href="photos/{{path}}?layout=list" class="btn btn-xs btn-info" ng-class="{'active' : layout == 'list'}">List <span class="glyphicon glyphicon-th-list"></span></a>
-            <a ng-if="total >= 3 || layout === 'carousel'" ng-href="photos/{{path}}?layout=carousel" class="btn btn-xs btn-info" ng-class="{'active' : layout == 'carousel'}">Carousel <span class="glyphicon glyphicon-picture"></span></a>
+            <a ng-if="detect.isMobile === false && (total >= 3 || layout === 'carousel')" ng-href="photos/{{path}}?layout=carousel" class="btn btn-xs btn-info" ng-class="{'active' : layout == 'carousel'}">Carousel <span class="glyphicon glyphicon-picture"></span></a>
         </div>
         <h4>{{breadcrumb(path)}}</h4>
         <div class="row">
