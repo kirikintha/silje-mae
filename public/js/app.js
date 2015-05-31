@@ -86,7 +86,12 @@ PhotoApp.config(['$routeProvider', '$locationProvider',
                 .when('/home', {
                     templateUrl: '/views/home.html',
                     controller: 'HomeCtrl',
-                    controllerAs: 'home'
+                    controllerAs: 'home',
+                    resolve: {
+                        detect: function (Detect) {
+                            return Detect.fetch();
+                        }
+                    }
                 })
                 .when('/photos', photosConfig)
                 .when('/photos/:path*', photosConfig)
@@ -119,8 +124,9 @@ PhotoApp.controller('MainCtrl', ['$scope', '$route', '$routeParams', '$location'
         };
     }]);
 
-PhotoApp.controller('HomeCtrl', ['$scope', '$routeParams',
-    function ($scope, $routeParams) {
+PhotoApp.controller('HomeCtrl', ['$scope', '$routeParams', 'detect',
+    function ($scope, $routeParams, detect) {
+        $scope.detect = detect.data;
         //Start the video.
         var player_settings = {example_option: true, width: "auto", height: "auto", techOrder: ["html5", "flash"]};
         var player = videojs('video-silje-mae', player_settings);
