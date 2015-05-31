@@ -21,6 +21,7 @@ Route::get('/', function() {
 Route::group(array('prefix' => 'api'), function() {
     Route::get('/photos/{path?}', ['as' => 'photos', 'uses' => 'PhotoController@index'])->where('path', '.+');
     Route::get('/menus', ['as' => 'menus', 'uses' => 'MenuController@index']);
+    Route::get('/detect', ['as' => 'detect', 'uses' => 'DetectController@index']);
 });
 
 // CATCH ALL ROUTE =============================  

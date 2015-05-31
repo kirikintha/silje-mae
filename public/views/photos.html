@@ -9,15 +9,15 @@
     </div>
     <div class="view col-sm-9">
         <div id="layout-controls" class="pull-right">
-            <a ng-href="photos/{{path}}?layout=tile" class="btn btn-xs btn-info" ng-class="{'active' : layout == 'tile'}">Tile <span class="glyphicon glyphicon-th"></span></a>
-            <a ng-href="photos/{{path}}?layout=list" class="btn btn-xs btn-info" ng-class="{'active' : layout == 'list'}">List <span class="glyphicon glyphicon-th-list"></span></a>
+            <a ng-if="detect.isMobile === false" ng-href="photos/{{path}}?layout=tile" class="btn btn-xs btn-info" ng-class="{'active' : layout == 'tile'}">Tile <span class="glyphicon glyphicon-th"></span></a>
+            <a ng-if="detect.isMobile === false" ng-href="photos/{{path}}?layout=list" class="btn btn-xs btn-info" ng-class="{'active' : layout == 'list'}">List <span class="glyphicon glyphicon-th-list"></span></a>
             <a ng-if="total >= 3 || layout === 'carousel'" ng-href="photos/{{path}}?layout=carousel" class="btn btn-xs btn-info" ng-class="{'active' : layout == 'carousel'}">Carousel <span class="glyphicon glyphicon-picture"></span></a>
         </div>
         <h4>{{breadcrumb(path)}}</h4>
         <div class="row">
             <loading></loading>
             <!--Tile Layout-->
-            <div ng-if="layout === 'tile'" ng-repeat="item in photos track by $index" class="col-md-4 repeat-animate tile">
+            <div ng-if="layout === 'tile' && detect.isMobile === false" ng-repeat="item in photos track by $index" class="col-md-4 repeat-animate tile">
                 <div ng-show="item.title !== undefined" class="thumbnail">
                     <a ng-href="{{link(item.path)}}">
                         <h5>{{item.title}}</h5>
@@ -29,7 +29,7 @@
                 </div>
             </div>
             <!--List Layout-->
-            <div ng-if="layout === 'list'" ng-repeat="item in photos track by $index" class="col-md-12 repeat-animate list">
+            <div ng-if="layout === 'list' && detect.isMobile === false" ng-repeat="item in photos track by $index" class="col-md-12 repeat-animate list">
                 <div ng-show="item.title !== undefined" class="thumbnail">
                     <a ng-href="{{link(item.path)}}">
                         <h5>{{item.title}}</h5>

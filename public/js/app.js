@@ -41,6 +41,17 @@ PhotoApp.service('Menus', ['$http',
         };
     }]);
 
+//Detect
+PhotoApp.service('Detect', ['$http',
+    function ($http) {
+        return {
+            // get all the comments
+            fetch: function () {
+                return $http.get('/api/detect', {cache: false});
+            }
+        };
+    }]);
+
 //@TODO - change me, to the piece that is in the controller.
 PhotoApp.service('Photos', ['$http', '$route', '_',
     function ($http, $route, _) {
@@ -64,6 +75,9 @@ PhotoApp.config(['$routeProvider', '$locationProvider',
             resolve: {
                 menus: function (Menus) {
                     return Menus.fetch();
+                },
+                detect: function (Detect) {
+                    return Detect.fetch();
                 }
             }
         };
@@ -85,15 +99,23 @@ PhotoApp.config(['$routeProvider', '$locationProvider',
 
 //Ctrls.
 
-PhotoApp.controller('MainCtrl', ['$route', '$routeParams', '$location',
-    function ($route, $routeParams, $location) {
-        //Nothing here.
+PhotoApp.controller('MainCtrl', ['$scope', '$route', '$routeParams', '$location',
+    function ($scope, $route, $routeParams, $location) {
+        //Animate a view, if we are on the home page.
+        //@TODO - would love to be able to make this a param on a page.
         this.viewAnimate = function () {
             var path = $location.path();
             if (path === '/home') {
                 return 'view-animate';
             }
             return 'view-no-animate';
+        };
+        //Look for active menu.
+        this.checkNavActive = function (modifier) {
+          var path = $location.path();
+          var pattern = '^\/' + modifier;  
+          var regex = new RegExp(pattern, 'ig');
+          return (regex.test(path) === true) ? 'active' : '';
         };
     }]);
 
@@ -107,47 +129,48 @@ PhotoApp.controller('HomeCtrl', ['$scope', '$routeParams',
         });
     }]);
 
-PhotoApp.controller('PhotoCtrl', ['$scope', '$timeout', '$http', '$routeParams', '_', 'menus', 'Photos',
-    function ($scope, $timeout, $http, $routeParams, _, menus, Photos) {
+//@TODO - clean me up.
+PhotoApp.controller('PhotoCtrl', ['$scope', '$http', '$routeParams', '_', 'menus', 'detect',
+    function ($scope, $http, $routeParams, _, menus, detect) {
+        $scope.detect = detect.data;
         $scope.layout = _.isUndefined($routeParams.layout) ? 'tile' : $routeParams.layout;
         $scope.menus = menus.data;
         $scope.photos = [];
         //Make breacrumb.
         $scope.path = _.isUndefined($routeParams.path) ? '' : $routeParams.path;
-        $scope.breadcrumb = function (string) {
-            return string
-                    //replace the begining
-                    .replace(/^\//, '')
-                    .replace('/', ' - ');
-        };
         //Look for photos path.
         var path = _.isUndefined($routeParams.path) ? '/api/photos' : '/api/photos/' + $routeParams.path;
         //Get Photos.
         $scope.loading = true;
         $scope.dataLoaded = false;
         $scope.total = 0;
-        //Timeout Loading.
-        $timeout(function () {
-            $http.get(path, {cache: true})
-                    .success(function (data) {
-                        $scope.loading = false;
-                        $scope.photos = data;
-                        $scope.dataLoaded = true;
-                        $scope.total = _.size(data);
-                    });
-        }, 1000);
+        //Load Photos
+        $http.get(path, {cache: true})
+                .success(function (data) {
+                    $scope.loading = false;
+                    $scope.photos = data;
+                    $scope.dataLoaded = true;
+                    $scope.total = _.size(data);
+                });
         //Image urls.
         $scope.image = {
-          base: 'https://s3.amazonaws.com/silje-mae/',
-          thumbnail: function (file_name) {
-              return this.base + 'thumbnails/' + file_name
-          },
-          full: function (file_name) {
-              return this.base + 'full/' + file_name
-          }  
+            base: 'https://s3.amazonaws.com/silje-mae/',
+            thumbnail: function (file_name) {
+                return this.base + 'thumbnails/' + file_name
+            },
+            full: function (file_name) {
+                return this.base + 'full/' + file_name
+            }
         };
         //Links.
         $scope.link = function (path) {
             return 'photos/' + path + '?layout=' + $scope.layout;
+        };
+        //Breacrumbs.
+        $scope.breadcrumb = function (string) {
+            return string
+                    //replace the begining
+                    .replace(/^\//, '')
+                    .replace('/', ' - ');
         };
     }]);

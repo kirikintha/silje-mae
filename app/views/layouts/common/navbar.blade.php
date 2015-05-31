@@ -11,7 +11,7 @@
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li><a href="/photos">Photos</a></li>
+                <li class="" ng-class="main.checkNavActive('photos')"><a href="/photos">Photos</a></li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>
