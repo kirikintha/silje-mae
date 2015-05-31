@@ -144,9 +144,6 @@ PhotoApp.controller('PhotoCtrl', ['$scope', '$http', '$routeParams', '_', 'menus
         $scope.detect = detect.data;
         //Set layout.
         $scope.layout = _.isUndefined($routeParams.layout) ? 'tile' : $routeParams.layout;
-        if ($scope.detect.isMobile === true) {
-            $scope.layout = 'carousel';
-        }
         //Make breacrumb.
         $scope.path = _.isUndefined($routeParams.path) ? '' : $routeParams.path;
         //Look for photos path.
@@ -163,6 +160,13 @@ PhotoApp.controller('PhotoCtrl', ['$scope', '$http', '$routeParams', '_', 'menus
                     $scope.dataLoaded = true;
                     $scope.total = _.size(data);
                 });
+        //Look at results to define mobile scope.
+        if ($scope.detect.isMobile === true && $scope.total > 1) {
+            //Go to carousel, for anything other than one photo result.
+            $scope.layout = 'carousel';
+        } else {
+            $scope.layout = 'tile';
+        }
         //Image urls.
         $scope.image = {
             base: 'https://s3.amazonaws.com/silje-mae/',
