@@ -179,7 +179,11 @@ PhotoApp.controller('PhotoCtrl', ['$scope', '$http', '$routeParams', '_', 'menus
         };
         //Links.
         $scope.link = function (path) {
-            return 'photos/' + path + '?layout=' + $scope.layout;
+            if ($scope.detect.isMobile === true) {
+                return 'photos/' + path + '?layout=' + $scope.layout;
+            } else {
+                return 'photos/' + path;
+            }
         };
         //Breacrumbs.
         $scope.breadcrumb = function (string) {
