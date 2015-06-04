@@ -195,29 +195,30 @@ class PhotosUpdateCommand extends Command {
     // Strangely, it's better to make new images everytime, rather than chain.
     private function makeThumbnail($uri, $file_name) {
         $key = sprintf('thumbnails/%s', $file_name);
-        $this->makeImageFit($key, $uri, $file_name, 242, 200);
+        $this->makeImageFit($key, $uri, $file_name, 242);
     }
 
     //Make a full sized image.
     private function makeFull($uri, $file_name) {
         $key = sprintf('full/%s', $file_name);
-        $this->makeImageFit($key, $uri, $file_name, 726, 600);
+        $this->makeImageFit($key, $uri, $file_name, 726);
     }
 
     //Make image fit to a certain size.
-    private function makeImageFit($key, $uri, $file_name, $w = 242, $h = 200) {
+    private function makeImageFit($key, $uri, $file_name, $w = 242) {
         $saveAs = $this->tmp . '/' . $file_name;
         $img = \Image::make($uri)->orientate();
-        $img->fit($w, $h, function ($constraint) {
-            $constraint->upsize();
-        }, 'top');
+        $img->resize($w, null, function ($constraint) {
+            $constraint->aspectRatio();
+        });
         $img->save($saveAs, 80);
         $img->destroy();
         //Send File back up to S3.
         $this->s3->put(array(
             'Bucket' => $this->s3->request['bucket'],
             'Key' => $key,
-            'SourceFile' => $saveAs
+            'CacheControl' => 'max-age=172800',
+            'SourceFile' => $saveAs,
         ));
         //Delete temp File.
         File::delete($saveAs);

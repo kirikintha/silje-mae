@@ -1,0 +1,6 @@
+<ul class="dropdown-menu" role="menu" dx-start-with="menus">
+    <li ng-class="{'active' : node.path == path}" ng-repeat="node in $dxPrior">
+        <a ng-href="{{link(node.path)}}">{{node.name}}</a>
+        <ul class="nav" dx-connect="node.children"/>
+    </li>
+</ul>

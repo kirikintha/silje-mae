@@ -11,7 +11,10 @@
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="" ng-class="main.checkNavActive('photos')"><a href="/photos">Photos</a></li>
+                <li class="dropdown" ng-class="checkNavActive('photos')">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Photos <span class="caret"></span></a>
+                    <menu-photos></menu-photos>
+                </li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>

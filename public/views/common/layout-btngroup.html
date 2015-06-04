@@ -1,0 +1,5 @@
+<div id="layout-controls" class="btn-group pull-right" role="group">
+    <a ng-href="photos/{{path}}?layout=tile" class="btn btn btn-info" ng-class="{'active' : layout == 'tile'}"> Tile <span class="glyphicon glyphicon-th"></span></a>
+    <a ng-href="photos/{{path}}?layout=list" class="btn btn btn-info" ng-class="{'active' : layout == 'list'}"> List <span class="glyphicon glyphicon-th-list"></span></a>
+    <a ng-if="total >= 3 || layout === 'carousel'" ng-href="photos/{{path}}?layout=carousel" class="btn btn btn-info" ng-class="{'active' : layout == 'carousel'}"> Carousel <span class="glyphicon glyphicon-picture"></span></a>
+</div>

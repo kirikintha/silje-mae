@@ -27,19 +27,46 @@ PhotoApp.directive('loading', function () {
                     $(element).hide();
             });
         }
-    }
+    };
 });
 
-//Services
-PhotoApp.service('Menus', ['$http',
-    function ($http) {
+PhotoApp.directive('menuPhotos', function () {
+    return {
+        restrict: 'E',
+        replace: true,
+        templateUrl: '/views/menus/menu-photos.html'
+    };
+});
+
+PhotoApp.directive('breadcrumbs', ['$location', function ($location) {
         return {
-            // get all the comments
-            fetch: function () {
-                return $http.get('/api/menus', {cache: true});
+            restrict: 'E',
+            replace: true,
+            templateUrl: '/views/common/breadcrumbs.html',
+            link: function (scope, element, attr) {
+                var path = $location.path().replace(/^\//, '');
+                scope.breadcrumbs = path.split('/');
             }
         };
     }]);
+
+PhotoApp.directive('layoutBtnGroup', function () {
+    return {
+        restrict: 'E',
+        replace: true,
+        templateUrl: '/views/common/layout-btngroup.html'
+    };
+});
+
+PhotoApp.directive('layoutPhotos', function () {
+    return {
+        restrict: 'E',
+        replace: true,
+        templateUrl: function (elem, attr) {
+            return '/views/photos/layout.' + attr.type + '.html';
+        }
+    };
+});
 
 //Detect
 PhotoApp.service('Detect', ['$http',
@@ -48,18 +75,6 @@ PhotoApp.service('Detect', ['$http',
             // get all the comments
             fetch: function () {
                 return $http.get('/api/detect', {cache: false});
-            }
-        };
-    }]);
-
-//@TODO - change me, to the piece that is in the controller.
-PhotoApp.service('Photos', ['$http', '$route', '_',
-    function ($http, $route, _) {
-        return {
-            // get all the comments
-            fetch: function () {
-                var path = _.isUndefined($route.current.params.path) ? '/api/photos' : '/api/photos/' + $route.current.params.path;
-                return $http.get(path, {cache: true});
             }
         };
     }]);
@@ -73,9 +88,6 @@ PhotoApp.config(['$routeProvider', '$locationProvider',
             controller: 'PhotoCtrl',
             controllerAs: 'photo',
             resolve: {
-                menus: function (Menus) {
-                    return Menus.fetch();
-                },
                 detect: function (Detect) {
                     return Detect.fetch();
                 }
@@ -104,11 +116,14 @@ PhotoApp.config(['$routeProvider', '$locationProvider',
 
 //Ctrls.
 
-PhotoApp.controller('MainCtrl', ['$scope', '$route', '$routeParams', '$location',
-    function ($scope, $route, $routeParams, $location) {
+PhotoApp.controller('MainCtrl', ['$scope', '$http', '$route', '$routeParams', '$location', '_',
+    function ($scope, $http, $route, $routeParams, $location, _) {
+        var layout = $location.search().layout;
+        //Set layout.
+        $scope.layout = _.isUndefined(layout) ? 'tile' : layout;
         //Animate a view, if we are on the home page.
         //@TODO - would love to be able to make this a param on a page.
-        this.viewAnimate = function () {
+        $scope.viewAnimate = function () {
             var path = $location.path();
             if (path === '/home') {
                 return 'view-animate';
@@ -116,11 +131,21 @@ PhotoApp.controller('MainCtrl', ['$scope', '$route', '$routeParams', '$location'
             return 'view-no-animate';
         };
         //Look for active menu.
-        this.checkNavActive = function (modifier) {
+        $scope.checkNavActive = function (modifier) {
             var path = $location.path();
             var pattern = '^\/' + modifier;
             var regex = new RegExp(pattern, 'ig');
             return (regex.test(path) === true) ? 'active' : '';
+        };
+        //Scope Items.
+        $scope.menus = [];
+        $http.get('/api/menus', {cache: true})
+                .success(function (data) {
+                    $scope.menus = data;
+                });
+        //Testing.
+        $scope.link = function (path) {
+            return 'photos/' + path + '?layout=' + $scope.layout;
         };
     }]);
 
@@ -136,16 +161,13 @@ PhotoApp.controller('HomeCtrl', ['$scope', '$routeParams', 'detect',
     }]);
 
 //@TODO - clean me up.
-PhotoApp.controller('PhotoCtrl', ['$scope', '$http', '$routeParams', '_', 'menus', 'detect',
-    function ($scope, $http, $routeParams, _, menus, detect) {
-        //Reset vars
-        $scope.menus = menus.data;
-        $scope.photos = [];
-        $scope.detect = detect.data;
-        //Set layout.
+PhotoApp.controller('PhotoCtrl', ['$scope', '$http', '$routeParams', '_', 'detect',
+    function ($scope, $http, $routeParams, _, detect) {
         $scope.layout = _.isUndefined($routeParams.layout) ? 'tile' : $routeParams.layout;
         //Make breacrumb.
         $scope.path = _.isUndefined($routeParams.path) ? '' : $routeParams.path;
+        $scope.photos = [];
+        $scope.detect = detect.data;
         //Look for photos path.
         var path = _.isUndefined($routeParams.path) ? '/api/photos' : '/api/photos/' + $routeParams.path;
         //Get Photos.
@@ -156,33 +178,18 @@ PhotoApp.controller('PhotoCtrl', ['$scope', '$http', '$routeParams', '_', 'menus
         $http.get(path, {cache: true})
                 .success(function (data) {
                     $scope.total = _.size(data);
-                    $scope.loading = false;
                     $scope.photos = data;
                     $scope.dataLoaded = true;
+                    $scope.loading = false;
                 });
         //Image urls.
         $scope.image = {
             base: 'https://s3.amazonaws.com/silje-mae/',
             thumbnail: function (file_name) {
-                return this.base + 'thumbnails/' + file_name
+                return this.base + 'thumbnails/' + file_name;
             },
             full: function (file_name) {
-                return this.base + 'full/' + file_name
+                return this.base + 'full/' + file_name;
             }
-        };
-        //Links.
-        $scope.link = function (path) {
-            if ($scope.detect.isMobile === true) {
-                return 'photos/' + path + '?layout=' + $scope.layout;
-            } else {
-                return 'photos/' + path;
-            }
-        };
-        //Breacrumbs.
-        $scope.breadcrumb = function (string) {
-            return string
-                    //replace the begining
-                    .replace(/^\//, '')
-                    .replace('/', ' - ');
         };
     }]);

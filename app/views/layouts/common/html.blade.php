@@ -7,7 +7,7 @@
         @include('layouts.common.navbar')
 
         <div class="container">
-            <div ng-view ng-class="main.viewAnimate()"></div>
+            <div ng-view ng-class="viewAnimate()"></div>
         </div><!-- /.container -->
 
         @include('layouts.common.foot')

@@ -89,3 +89,14 @@ ul.nav li > ul {
 #layout-controls blockquote {
     margin-bottom: 0;
 }
+
+.photos.tile .thumbnail {
+    display: block;
+    height: 200px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.layout-controls {
+    padding-bottom: 3px;
+}
