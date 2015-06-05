@@ -294,7 +294,6 @@ PhotoApp.controller('PhotoCtrl', ['$rootScope', '$scope', '$http', '$routeParams
                         $scope.total = _.size(data);
                         var offset = ($scope.current - 1) * $scope.limit;
                         var end = $scope.current * $scope.limit;
-                        console.debug(offset, end);
                         $scope.photos = _.slice(data, offset, end);
                         $scope.dataLoaded = true;
                         $rootScope.loading = false;

@@ -153,3 +153,7 @@ ul.nav li > ul {
     position: relative;
     text-decoration: none;
 }
+
+.tile .thumbnail a {
+    cursor: pointer;
+}
