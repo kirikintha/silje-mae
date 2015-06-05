@@ -7,6 +7,7 @@ body {
 
 body > .container {
     margin-top: 65px;
+    margin-bottom: 65px;
 }
 
 .breadcrumb {
@@ -54,9 +55,10 @@ div.loader {
 }
 
 #bunny-bean {
-    bottom: -26px;
+    bottom: 50px;
     height: 250px;
     left: 0;
+    overflow: hidden;
     position: fixed;
     width: 50%;
     z-index: 9999;
@@ -156,4 +158,12 @@ ul.nav li > ul {
 
 .tile .thumbnail a {
     cursor: pointer;
+}
+
+.btn {
+    border: medium none;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 16px;
+    text-transform: uppercase;
 }

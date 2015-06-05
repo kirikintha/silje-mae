@@ -12,5 +12,7 @@
         <div ng-if="item.title == undefined" class="thumbnail">
             <a ng-click="lightbox(image.full(item.file_name))"><img class="img-responsive" ng-src="{{image.thumbnail(item.file_name)}}" /></a>
         </div>
-    </div>  
+    </div> 
+    <!--Pager-->
+    <pager></pager>
 </div>
