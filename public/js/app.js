@@ -13,23 +13,41 @@ PhotoApp.factory('_', ['lodash',
         return lodash;
     }]);
 
-//Directives
-PhotoApp.directive('loading', function () {
-    return {
-        restrict: 'E',
-        replace: true,
-        template: '<div class="center-block text-center loader"><img src="/images/loader.gif"/></div>',
-        link: function (scope, element, attr) {
-            scope.$watch('loading', function (val) {
-                if (val)
-                    $(element).show();
-                else
-                    $(element).hide();
-            });
+//Query String Factory.
+PhotoApp.factory('qs', ['lodash',
+    function (lodash) {
+        return {
+            make: function (obj, prefix) {
+                var str = [];
+                for (var p in obj) {
+                    var k = prefix ? prefix + "[" + p + "]" : p,
+                            v = obj[p];
+                    str.push(angular.isObject(v) ? qs(v, k) : (k) + "=" + encodeURIComponent(v));
+                }
+                return '?' + str.join("&");
+            }
         }
-    };
-});
+    }]);
 
+//Directives
+
+//Loading directive.
+PhotoApp.directive('loader', ['$rootScope', function ($rootScope) {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attr) {
+                $rootScope.$watch('loading', function (val) {
+                    if (val === true) {
+                        element.addClass('loading');
+                    } else {
+                        element.removeClass('loading');
+                    }
+                });
+            }
+        };
+    }]);
+
+//Menus for Photo.
 PhotoApp.directive('menuPhotos', function () {
     return {
         restrict: 'E',
@@ -38,6 +56,7 @@ PhotoApp.directive('menuPhotos', function () {
     };
 });
 
+//Breadcrumbs.
 PhotoApp.directive('breadcrumbs', ['$location', function ($location) {
         return {
             restrict: 'E',
@@ -50,6 +69,7 @@ PhotoApp.directive('breadcrumbs', ['$location', function ($location) {
         };
     }]);
 
+//Control Buttons for layout.
 PhotoApp.directive('layoutBtnGroup', function () {
     return {
         restrict: 'E',
@@ -58,6 +78,7 @@ PhotoApp.directive('layoutBtnGroup', function () {
     };
 });
 
+//Photo Layout.
 PhotoApp.directive('layoutPhotos', function () {
     return {
         restrict: 'E',
@@ -68,7 +89,96 @@ PhotoApp.directive('layoutPhotos', function () {
     };
 });
 
-//Detect
+//Lightbox.
+PhotoApp.directive('lightbox', ['$animate', function ($animate) {
+        return {
+            restrict: 'E',
+            replace: true,
+            templateUrl: '/views/common/lightbox.html',
+            link: function (scope, element, attr) {
+                //Removal.
+                element.on('click', function () {
+                    scope.$apply(function () {
+                        $animate.removeClass(element, 'in').then(function () {
+                            var current = angular.element('#lightbox > img');
+                            $animate.leave(current);
+                            $animate.addClass(element, 'hidden');
+                        });
+                    });
+                });
+            },
+            controller: function ($scope) {
+                //Image urls.
+                $scope.image = {
+                    base: 'https://s3.amazonaws.com/silje-mae/',
+                    thumbnail: function (file_name) {
+                        return this.image(file_name, 'thumbnails');
+                    },
+                    full: function (file_name) {
+                        return this.image(file_name, 'full');
+                    },
+                    image: function (file_name, type) {
+                        if (file_name !== undefined && type !== undefined) {
+                            return this.base + type + '/' + file_name;
+                        }
+                        return '';
+                    }
+                };
+                $scope.lightbox = function (delta) {
+                    if (delta !== undefined) {
+                        //Trigger lightbox animation, to open.
+                        var lightbox = angular.element('#lightbox');
+                        var image = angular.element('<img src="' + delta + '" />');
+                        $animate.enter(image, lightbox);
+                        $animate.removeClass(lightbox, 'hidden').then(function () {
+                            $animate.addClass(lightbox, 'in');
+                        });
+                    }
+                };
+            }
+        };
+    }]);
+
+//Photo Layout.
+PhotoApp.directive('pager', ['$location', '$routeParams', 'qs', function ($location, $routeParams, qs) {
+        return {
+            restrict: 'E',
+            replace: true,
+            templateUrl: function (elem, attr) {
+                return '/views/common/pager.html';
+            },
+            link: function (scope, element, attr) {
+                scope.$watch('pager', function (pager) {
+                    var path = $location.path();
+                    var total = 0, limit = 10, current = 1;
+                    pager = pager || {total: 0};
+                    if (pager.total > 0) {
+                        total = pager.total || total;
+                        limit = pager.limit || limit;
+                        current = pager.current || current;
+                        scope.totalPages = Math.ceil(total / limit);
+                        //Create pages.
+                        var pages = [];
+                        for (var i = 1; i <= scope.totalPages; i++) {
+                            //Get our parameters.
+                            var qryString = {
+                                layout: $routeParams.layout || scope.layout,
+                                page: i
+                            };
+                            pages.push({
+                                url: path + qs.make(qryString),
+                                name: i,
+                                current: current
+                            });
+                        }
+                        scope.pages = pages;
+                    }
+                });
+            }
+        };
+    }]);
+
+//Detect.
 PhotoApp.service('Detect', ['$http',
     function ($http) {
         return {
@@ -113,7 +223,6 @@ PhotoApp.config(['$routeProvider', '$locationProvider',
         //Set HTML 5 mode.
         $locationProvider.html5Mode(true);
     }]);
-
 //Ctrls.
 
 PhotoApp.controller('MainCtrl', ['$scope', '$http', '$route', '$routeParams', '$location', '_',
@@ -160,9 +269,11 @@ PhotoApp.controller('HomeCtrl', ['$scope', '$routeParams', 'detect',
         });
     }]);
 
-//@TODO - clean me up.
-PhotoApp.controller('PhotoCtrl', ['$scope', '$http', '$routeParams', '_', 'detect',
-    function ($scope, $http, $routeParams, _, detect) {
+
+PhotoApp.controller('PhotoCtrl', ['$rootScope', '$scope', '$http', '$routeParams', '$animate', '$timeout', '_', 'detect',
+    function ($rootScope, $scope, $http, $routeParams, $animate, $timeout, _, detect) {
+        $scope.limit = 50;
+        $scope.current = _.isUndefined($routeParams.page) ? 1 : parseInt($routeParams.page);
         $scope.layout = _.isUndefined($routeParams.layout) ? 'tile' : $routeParams.layout;
         //Make breacrumb.
         $scope.path = _.isUndefined($routeParams.path) ? '' : $routeParams.path;
@@ -171,25 +282,27 @@ PhotoApp.controller('PhotoCtrl', ['$scope', '$http', '$routeParams', '_', 'detec
         //Look for photos path.
         var path = _.isUndefined($routeParams.path) ? '/api/photos' : '/api/photos/' + $routeParams.path;
         //Get Photos.
-        $scope.loading = true;
+        $rootScope.loading = true;
         $scope.dataLoaded = false;
         $scope.total = 0;
-        //Load Photos
-        $http.get(path, {cache: true})
-                .success(function (data) {
-                    $scope.total = _.size(data);
-                    $scope.photos = data;
-                    $scope.dataLoaded = true;
-                    $scope.loading = false;
-                });
-        //Image urls.
-        $scope.image = {
-            base: 'https://s3.amazonaws.com/silje-mae/',
-            thumbnail: function (file_name) {
-                return this.base + 'thumbnails/' + file_name;
-            },
-            full: function (file_name) {
-                return this.base + 'full/' + file_name;
-            }
-        };
+        //Load Photos. Delay 1 sec.
+        $timeout(function () {
+            $http.get(path, {cache: true})
+                    .success(function (data) {
+                        //@TODO - put me back into the pager directive.
+                        //All this now, can basically be a part of the pager mechanism.
+                        $scope.total = _.size(data);
+                        var offset = ($scope.current - 1) * $scope.limit;
+                        var end = $scope.current * $scope.limit;
+                        console.debug(offset, end);
+                        $scope.photos = _.slice(data, offset, end);
+                        $scope.dataLoaded = true;
+                        $rootScope.loading = false;
+                        $scope.pager = {
+                            total: $scope.total,
+                            current: $scope.current,
+                            limit: $scope.limit
+                        };
+                    });
+        }, 1000);
     }]);

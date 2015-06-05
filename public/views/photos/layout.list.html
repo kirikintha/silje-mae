@@ -1,11 +1,16 @@
-<div ng-if="layout === 'list'" ng-repeat="item in photos track by $index" class="col-md-12 repeat-animate list">
-    <div ng-show="item.title !== undefined" class="thumbnail">
-        <a ng-href="{{link(item.path)}}">
-            <h5>{{item.title}}</h5>
+<div ng-if="layout === 'list'">
+    <!--Pager-->
+    <pager></pager>
+    <!--Photos-->
+    <div ng-repeat="item in photos track by $index" class="col-md-12 repeat-animate list">
+        <div ng-show="item.title !== undefined" class="thumbnail">
+            <a ng-href="{{link(item.path)}}">
+                <h5>{{item.title}}</h5>
+                <img class="img-responsive center-block" ng-src="{{image.full(item.file_name)}}" />
+            </a>
+        </div>
+        <div ng-show="item.title == undefined" class="well well-sm">
             <img class="img-responsive center-block" ng-src="{{image.full(item.file_name)}}" />
-        </a>
-    </div>
-    <div ng-show="item.title == undefined" class="well well-sm">
-        <img class="img-responsive center-block" ng-src="{{image.full(item.file_name)}}" />
+        </div>
     </div>
 </div>

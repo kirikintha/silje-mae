@@ -1,0 +1,18 @@
+<div ng-show="totalPages > 1" class="col-md-12 clearfix">
+    <nav>
+        <span class="pagination-status text-uppercase">showing page {{current}} of {{totalPages}} ({{total}} total)</span>
+        <ul class="pagination">
+            <li>
+                <a href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="" ng-class="{'active' : page.current == page.name}" ng-repeat="page in pages"><a href="{{page.url}}">{{page.name}}</a></li>
+            <li>
+                <a href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>

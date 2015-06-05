@@ -119,7 +119,7 @@ class PhotoController extends \BaseController {
                 );
             }
         }
-        return Response::json($items);
+        return Response::json(array_values($items));
     }
 
 }

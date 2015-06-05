@@ -77,3 +77,31 @@
 .repeat-animate.ng-move.ng-move-active {
     opacity: 1;
 }
+
+#lightbox.ng-enter,
+#lightbox.ng-leave,
+#lightbox.ng-move {
+    -webkit-transition: all linear 1s;
+    -moz-transition: all linear 1s;
+    -o-transition: all linear 1s;
+    transition: all linear 1s;
+}
+
+#lightbox.ng-enter {
+    opacity: 0;
+}
+#lightbox.ng-enter.ng-enter-active {
+    opacity: 1;
+}
+#lightbox.ng-leave {
+    opacity: 1;
+}
+#lightbox.ng-leave.ng-leave-active {
+    opacity: 0;
+}
+#lightbox.ng-move {
+    opacity: 0.5;
+}
+#lightbox.ng-move.ng-move-active {
+    opacity: 1;
+}

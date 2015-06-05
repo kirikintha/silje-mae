@@ -1,11 +1,16 @@
-<div ng-if="layout === 'tile'" ng-repeat="item in photos track by $index" class="col-md-4 repeat-animate tile">
-    <div ng-show="item.title !== undefined" class="thumbnail">
-        <a ng-href="{{link(item.path)}}">
-            <h5>{{item.title}}</h5>
-            <img class="img-responsive" ng-src="{{image.thumbnail(item.file_name)}}" />
-        </a>
-    </div>
-    <div ng-show="item.title == undefined" class="thumbnail">
-        <img class="img-responsive" ng-src="{{image.thumbnail(item.file_name)}}" />
-    </div>
+<div ng-if="layout === 'tile'">
+    <!--Pager-->
+    <pager></pager>
+    <!--Photos-->
+    <div ng-repeat="item in photos track by $index" class="col-md-4 repeat-animate tile">
+        <div ng-if="item.title !== undefined" class="thumbnail">
+            <a ng-href="{{link(item.path)}}">
+                <h5>{{item.title}}</h5>
+                <img class="img-responsive" ng-src="{{image.thumbnail(item.file_name)}}" />
+            </a>
+        </div>
+        <div ng-if="item.title == undefined" class="thumbnail">
+            <a ng-click="lightbox(image.full(item.file_name))"><img class="img-responsive" ng-src="{{image.thumbnail(item.file_name)}}" /></a>
+        </div>
+    </div>  
 </div>

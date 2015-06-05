@@ -2,7 +2,7 @@
 <html lang="en" ng-app="PhotoApp" ng-controller="MainCtrl as main">
     @include('layouts.common.head')
 
-    <body>
+    <body loader>
 
         @include('layouts.common.navbar')
 

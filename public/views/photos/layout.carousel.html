@@ -1,34 +1,40 @@
 <div ng-if="layout === 'carousel'" class="col-md-12 carousel">
-    <!--Slider Nav-->
-    <slick class="ng-slick slider-nav" ng-if="dataLoaded" 
-           init-onload="false" 
-           data="dataLoaded" 
-           infinite="true" 
-           lazy-load="progressive"
-           slides-to-show="3"
-           slides-to-scroll="1"
-           center-mode="true"
-           focus-on-select="true"
-           variable-width="true"
-           as-nav-for=".slider-for">
-        <div ng-repeat="item in photos track by $index">
-            <img class="image-responsive" data-lazy="{{image.thumbnail(item.file_name)}}" />
-        </div>
-    </slick>
-    <div class="col-md-6 col-md-offset-3">
-        <!--Slider For-->
-        <slick class="ng-slick slider-for" ng-if="dataLoaded" 
+    <!--Pager-->
+    <pager></pager>
+    <div class="col-md-12">
+        <!--Photos Carousel-->
+        <!--Slider Nav-->
+        <slick class="ng-slick slider-nav" ng-if="dataLoaded" 
                init-onload="false" 
                data="dataLoaded" 
+               infinite="true" 
                lazy-load="progressive"
-               slides-to-show="1"
+               slides-to-show="3"
                slides-to-scroll="1"
-               arrows="false"
-               fade="true"
-               as-nav-for=".slider-nav">
+               center-mode="true"
+               focus-on-select="true"
+               variable-width="true"
+               as-nav-for=".slider-for">
             <div ng-repeat="item in photos track by $index">
-                <img class="image-responsive" data-lazy="{{image.full(item.file_name)}}" />
+                <img class="image-responsive" data-lazy="{{image.thumbnail(item.file_name)}}" />
             </div>
         </slick>
+        <div class="col-md-6 col-md-offset-3">
+            <!--Slider For-->
+            <slick class="ng-slick slider-for" ng-if="dataLoaded" 
+                   init-onload="false" 
+                   data="dataLoaded" 
+                   lazy-load="progressive"
+                   slides-to-show="1"
+                   slides-to-scroll="1"
+                   arrows="false"
+                   fade="true"
+                   as-nav-for=".slider-nav">
+                <div ng-repeat="item in photos track by $index">
+                    <img class="image-responsive" data-lazy="{{image.full(item.file_name)}}" />
+                </div>
+            </slick>
+        </div>
     </div>
+
 </div>
