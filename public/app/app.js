@@ -1,16 +1,17 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Silje's Photo App.
+ *  This is the main file for setting up the app. This takes into account having
+ *  services, controllers, filters and directives.
+ *  Using this as a guide: https://github.com/mgechev/angularjs-style-guide#modules
  */
 
-var dependencies = [
+
+angular.module('PhotoApp', [
     //Angular Modules.
     'ngRoute', 'ngAnimate', 'ngLodash', 'dotjem.angular.tree', 'slick',
     //Photo App modules.
-    'PhotoApp.services', 'PhotoApp.controllers', 'PhotoApp.directives'
-];
-angular.module('PhotoApp', dependencies);
+    'PhotoApp.services', 'PhotoApp.filters', 'PhotoApp.directives', 'PhotoApp.controllers'
+]);
 
 //Route Configuration.
 angular.module('PhotoApp')
@@ -51,5 +52,6 @@ angular.module('PhotoApp')
 
 //Modules
 angular.module('PhotoApp.services', []);
+angular.module('PhotoApp.filters', []);
 angular.module('PhotoApp.directives', []);
 angular.module('PhotoApp.controllers', []);
