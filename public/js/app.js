@@ -147,8 +147,8 @@ PhotoApp.directive('pager', ['$location', '$routeParams', 'qs', function ($locat
             templateUrl: function (elem, attr) {
                 return '/views/common/pager.html';
             },
-            link: function (scope, element, attr) {
-                scope.$watch('pager', function (pager) {
+            controller: function ($scope) {
+                $scope.$watch('pager', function (pager) {
                     var path = $location.path();
                     var total = 0, limit = 10, current = 1;
                     pager = pager || {total: 0};
@@ -156,13 +156,13 @@ PhotoApp.directive('pager', ['$location', '$routeParams', 'qs', function ($locat
                         total = pager.total || total;
                         limit = pager.limit || limit;
                         current = pager.current || current;
-                        scope.totalPages = Math.ceil(total / limit);
+                        $scope.totalPages = Math.ceil(total / limit);
                         //Create pages.
                         var pages = [];
-                        for (var i = 1; i <= scope.totalPages; i++) {
+                        for (var i = 1; i <= $scope.totalPages; i++) {
                             //Get our parameters.
                             var qryString = {
-                                layout: $routeParams.layout || scope.layout,
+                                layout: $routeParams.layout || $scope.layout,
                                 page: i
                             };
                             pages.push({
@@ -171,7 +171,7 @@ PhotoApp.directive('pager', ['$location', '$routeParams', 'qs', function ($locat
                                 current: current
                             });
                         }
-                        scope.pages = pages;
+                        $scope.pages = pages;
                     }
                 });
             }
