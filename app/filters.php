@@ -1,5 +1,10 @@
 <?php
 
+// CATCH ALL ROUTE =============================  
+App::missing(function($exception) {
+    return App::make('MainController')->error($exception);
+});
+
 /*
   |--------------------------------------------------------------------------
   | Application & Route Filters

@@ -3,7 +3,7 @@
 use AwsFactory\Clients\AwsS3ClientInterface;
 use Illuminate\Support\Facades\File;
 
-class PhotoController extends \BaseController {
+class PhotoController extends Controller {
 
     private $thumbnails;
     private $access_key;
@@ -13,7 +13,6 @@ class PhotoController extends \BaseController {
     private $s3;
 
     public function __construct(AwsS3ClientInterface $s3) {
-        parent::__construct();
         //Set vars
         $this->s3 = $s3;
         //@TODO - let's move this back into the client.

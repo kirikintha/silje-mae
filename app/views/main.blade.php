@@ -6,8 +6,8 @@
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"> <!-- load fontawesome -->
 <link href="//vjs.zencdn.net/4.12/video-js.css" rel="stylesheet">
 <link href="/css/video-styles.css" rel="stylesheet">
-<link rel="stylesheet" href="/css/vendor/slick.css">
-<link rel="stylesheet" href="/css/vendor/slick-theme.css">
+<link rel="stylesheet" href="/lib/slick.css">
+<link rel="stylesheet" href="/lib/slick-theme.css">
 <link href="/css/animations.css" rel="stylesheet">
 <link href="/css/styles.css" rel="stylesheet">
 
@@ -15,17 +15,21 @@
 
 @section('scripts')
 
+<!--NG Dependencies-->
 <script src="//vjs.zencdn.net/4.12/video.js"></script>
-<script src="/js/vendor/jquery.min.js"></script>
-<script src="/js/vendor/bootstrap.min.js" ></script>
-<script src="/js/vendor/angular.min.js"></script>
-<script src="/js/vendor/angular-animate.min.js"></script>
-<script src="/js/vendor/angular-resource.min.js"></script>
-<script src="/js/vendor/angular-route.min.js"></script>
-<script src="/js/vendor/dotjem-angular-tree.min.js"></script>
-<script src="/js/vendor/ng-lodash.min.js"></script>
-<script src="/js/vendor/slick.min.js"></script>
-<script src="/js/vendor/slick.js"></script>
-<script src="/js/app.js"></script> <!-- load our application last -->
+<script src="/lib/jquery.min.js"></script>
+<script src="/lib/bootstrap.min.js" ></script>
+<script src="/lib/angular.min.js"></script>
+<script src="/lib/angular-animate.min.js"></script>
+<script src="/lib/angular-resource.min.js"></script>
+<script src="/lib/angular-route.min.js"></script>
+<script src="/lib/dotjem-angular-tree.min.js"></script>
+<script src="/lib/ng-lodash.min.js"></script>
+<script src="/lib/slick.min.js"></script>
+<script src="/lib/slick.js"></script>
+<!--NG App-->
+@foreach($assets as $asset)
+<script src="{{ $asset }}"></script>
+@endforeach
 
 @stop

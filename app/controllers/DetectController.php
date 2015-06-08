@@ -1,6 +1,6 @@
 <?php
 
-class DetectController extends \BaseController {
+class DetectController extends Controller {
 
     /**
      * Display a listing of the resource.

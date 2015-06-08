@@ -2,7 +2,7 @@
 
 use AwsFactory\Clients\AwsS3ClientInterface;
 
-class MenuController extends \BaseController {
+class MenuController extends Controller {
 
     private $menus = array();
     private $access_key;
@@ -12,7 +12,6 @@ class MenuController extends \BaseController {
     private $s3;
 
     public function __construct(AwsS3ClientInterface $s3) {
-        parent::__construct();
         //Set vars
         $this->s3 = $s3;
         //@TODO - let's move this back into the client.

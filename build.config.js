@@ -7,8 +7,8 @@ module.exports = {
    * development and the `compile_dir` folder is where our app resides once it's
    * completely built.
    */
-  js_build_dir: 'public/js/vendor',
-  css_build_dir: 'public/css/vendor',
+  js_build_dir: 'public/lib',
+  css_build_dir: 'public/lib',
 
   /**
    * All Vendor files that will be copied to the public vendor directory
