@@ -5,7 +5,6 @@
  *  Using this as a guide: https://github.com/mgechev/angularjs-style-guide#modules
  */
 
-
 angular.module('PhotoApp', [
     //Angular Modules.
     'ngRoute', 'ngAnimate', 'ngLodash', 'dotjem.angular.tree', 'slick',
