@@ -137,10 +137,9 @@ ul.nav li > ul {
 }
 
 #lightbox img {
-    height: 80%;
+    height: 75%;
     width: auto;
     margin-top: 8%;
-    max-width: 726px;
 }
 
 #lightbox:target {
