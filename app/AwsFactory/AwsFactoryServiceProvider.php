@@ -12,7 +12,7 @@ class AwsFactoryServiceProvider extends ServiceProvider {
     public function boot() {
         $commands = array(
             //Billing
-            'photos-update',
+            'media-update',
         );
         $this->commands($commands);
     }
@@ -34,8 +34,8 @@ class AwsFactoryServiceProvider extends ServiceProvider {
         );
         //Bind Commands.
         //@TODO - change names, because we can shorten them?
-        $this->app->bindShared('photos-update', function($app) {
-            return $this->app->make('AwsFactory\Commands\PhotosUpdateCommand');
+        $this->app->bindShared('media-update', function($app) {
+            return $this->app->make('AwsFactory\Commands\MediaUpdateCommand');
         });
     }
 

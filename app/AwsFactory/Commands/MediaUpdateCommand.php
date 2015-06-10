@@ -26,13 +26,14 @@ class PhotosUpdateCommand extends Command {
         'thumbnails',
         'menus'
     );
+    private $video;
 
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $name = 'photos:update';
+    protected $name = 'media:update';
 
     /**
      * The console command description.
@@ -116,10 +117,8 @@ class PhotosUpdateCommand extends Command {
                 $object = $this->s3->objects->current();
                 $this->s3->objects->next();
                 if (!empty($object)) {
-                    //Look for a menu item.
-//                        $this->setMenuItem($object['Key']);
                     //Look for images, and create thumbnails.
-                    $this->createImages($object);
+                    $this->create($object);
                 }
                 // advance the progress bar 1 unit.
                 $progress->advance();
@@ -138,28 +137,42 @@ class PhotosUpdateCommand extends Command {
     private function postUpdate() {
         $this->info('Import finished, cleaning up.');
         $this->killCache();
-        $this->prime();
+        $this->prime('menus');
+        $this->prime('photos');
     }
 
     //Set thumbnail.
-    private function createImages($object) {
+    private function create($object) {
         $key = $object['Key'];
         $size = $object['Size'];
-        if (preg_match('/\.(jpg|jpeg|bpm|png|gif)$/i', $key) && (int) $size > 0) {
-            $extension = File::extension($key);
-            $file_name = str_replace('"', '', $object['ETag']) . '.' . $extension;
-            //Check that object exists or not.
-            $exists = $this->exists($file_name);
-            if (!$exists) {
-                //Make images.
-                $this->makeImages($key, $file_name);
+        $eTag = $object['ETag'];
+        if ((int) $size > 0) {
+            //Look for images.
+            if (preg_match('/\.(jpg|jpeg|bpm|png|gif)$/i', $key)) {
+                $this->createImages($key, $eTag);
             }
-            unset($exists, $extension, $file_name);
+            //Look for 
+            if (preg_match('/\.(mov|mp4)$/i', $key)) {
+                $this->createVideos($key, $eTag);
+            }
         }
     }
 
-    //Check that an object exists.
-    private function exists($file_name) {
+    //Create images.
+    private function createImages($key, $eTag) {
+        $extension = File::extension($key);
+        $file_name = str_replace('"', '', $eTag) . '.' . $extension;
+        //Check that object exists or not.
+        $exists = $this->imageExists($file_name);
+        if (!$exists) {
+            //Make images.
+            $this->makeImages($key, $file_name);
+        }
+        unset($exists, $extension, $file_name);
+    }
+
+    //Check that an image object exists.
+    private function imageExists($file_name) {
         $key = 'thumbnails/' . $file_name;
         return $this->s3->objectExists($this->s3->request['bucket'], $key);
     }
@@ -173,6 +186,58 @@ class PhotosUpdateCommand extends Command {
         \File::delete($uri);
         //Add to total of imported items.
         $this->s3->total ++;
+    }
+
+    //Create videos.
+    //@TODO - sloppy.
+    private function createVideos($key, $eTag) {
+        $extension = File::extension($key);
+        $file_name = str_replace('"', '', $eTag) . '.' . $extension;
+        //Check that object exists or not.
+        $exists = $this->videoExists($file_name, $extension);
+        if (!$exists) {
+            //Make videos.
+            //Reset array.
+            $this->video = array(
+                'info' => array(),
+                'in' => null,
+                'out' => null,
+                'created' => array(),
+            );
+            $this->makeVideos($key, $file_name, $extension);
+        }
+        unset($exists, $extension, $file_name);
+    }
+
+    //Check that an image object exists.
+    private function videoExists($file_name, $extension) {
+        $key = 'videos/' . str_replace($extension, 'mp4', $file_name);
+        return $this->s3->objectExists($this->s3->request['bucket'], $key);
+    }
+
+    //Download and re-encode videos.
+    //@TODO - this is messy.
+    private function makeVideos($key, $file_name, $extension) {
+        $uri = $this->download($key, $file_name);
+        $this->probe($uri);
+        $this->makeMP4($uri, $file_name, $extension);
+        $this->makeFLV($file_name, $extension);
+        $this->finish($uri);
+        //Add to total of imported items.
+        $this->s3->total ++;
+    }
+
+    //FFMPEG Probe
+    //To get rotation, look for video -> tags -> rotate
+    private function probe($uri) {
+        $command = sprintf('ffprobe -of json -show_streams %s 2>/dev/null', $uri);
+        exec($command, $output);
+        $json = utf8_encode(implode('', $output));
+        $probe = json_decode($json, true);
+        $this->video['info'] = array(
+            'video' => $probe['streams'][0],
+            'audio' => $probe['streams'][1],
+        );
     }
 
     //Download Object.
@@ -225,6 +290,85 @@ class PhotosUpdateCommand extends Command {
         unset($img);
     }
 
+    //Fix orientation and create FLV.
+    //http://nothing.golddave.com/2013/11/28/fix-smartphone-video-orientation/
+    private function makeMP4($uri, $file_name, $extension) {
+        $this->video['in'] = $uri;
+        $this->video['out'] = $this->tmp . '/' . str_replace($extension, 'mp4', $file_name);
+        //Look for Rotation and rotate.
+        $this->rotate();
+        //Resize Video
+        $command = sprintf('ffmpeg -y -i %s -vf "scale=640:-1" -acodec copy -movflags faststart %s 2>/dev/null', $this->video['in'], $this->video['out']);
+        //Scale video to mp4 and prep for streaming.
+        exec($command);
+        //Put the video back up to S3.
+        $this->putVideo($this->video['out']);
+        $this->video['created'][] = $this->video['out'];
+        $this->video['in'] = $this->video['out'];
+    }
+
+    //Rotate Video
+    private function rotate() {
+        if (isset($this->video['video']['tags']['rotate'])) {
+            $rotation = (int) $this->video['video']['tags']['rotate'];
+            $rotated = str_replace('master', 'rotated', $this->video['in']);
+            switch ($rotation) {
+                //Default is 90 degrees.
+                case 90:
+                default:
+                    $command = sprintf('ffmpeg -y -i %s -metadata:s:v rotate="0" -vf "transpose=1" -acodec copy %s 2>/dev/null', $this->video['in'], $rotated);
+                    break;
+            }
+            //Rotate
+            exec($command);
+            //If we have rotated, we now have to update the in and out, so that the scaling picks up the rotated file.
+            $this->video['created'][] = $rotated;
+            $this->video['in'] = $rotated;
+        }
+    }
+
+    //Make an FLV
+    private function makeFLV($file_name, $extension) {
+        //@TODO - we will have to take the MP4 version of the file, as this has
+        // been rotated and scaled.
+        //Make FLV
+        $this->video['out'] = $this->tmp . '/' . str_replace($extension, 'flv', $file_name);
+        //Exec FFMEG rotation.
+        $command = sprintf('ffmpeg -y -i %s -c:v libx264 -crf 19 %s 2>/dev/null', $this->video['in'], $this->video['out']);
+        exec($command);
+        $this->video['created'][] = $this->video['out'];
+        $this->putVideo($this->video['out']);
+    }
+
+    //Exec FFMPEG Command.
+    private function finish($uri) {
+        //Kill Created Files.
+        foreach ($this->video['created'] as $file_name) {
+            //Delete temp Files.
+            File::delete($file_name);
+        }
+        //Kill original.
+        \File::delete($uri);
+    }
+
+    //Put video to S3
+    private function putVideo($file_name) {
+        $bytes = File::size($file_name);
+        if ($bytes > 0) {
+            //Send the 
+            $info = new \SplFileInfo($file_name);
+            $key = sprintf('videos/%s', $info->getFilename());
+            //Send File back up to S3.
+            $options = array(
+                'Bucket' => $this->s3->request['bucket'],
+                'Key' => $key,
+                'CacheControl' => 'max-age=172800',
+                'SourceFile' => $file_name,
+            );
+            $this->s3->put($options);
+        }
+    }
+
     //Kill all caches.
     private function killCache() {
         $this->info('Killing Cache');
@@ -235,8 +379,8 @@ class PhotosUpdateCommand extends Command {
     }
 
     //Prime the cache.
-    private function prime() {
-        $url = \Config::get('app.url') . '/photos';
+    private function prime($location = null) {
+        $url = \Config::get('app.url') . '/api/' . $location;
         $this->info(sprintf('Priming Cache on: ' . $url));
         $curl = curl_init();
         curl_setopt_array($curl, array(
@@ -248,7 +392,6 @@ class PhotosUpdateCommand extends Command {
             $this->error(curl_error($curl));
         }
         curl_close($curl);
-        $this->info('Cache prime complete.');
     }
 
 }
