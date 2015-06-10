@@ -14,7 +14,7 @@ use Symfony\Component\Console\Helper\ProgressBar;
 use Illuminate\Support\Facades\File;
 use AwsFactory\Clients\AwsS3ClientInterface;
 
-class PhotosUpdateCommand extends Command {
+class MediaUpdateCommand extends Command {
 
     private $access_key;
     private $secret;
