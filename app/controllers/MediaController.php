@@ -3,9 +3,9 @@
 use AwsFactory\Clients\AwsS3ClientInterface;
 use Illuminate\Support\Facades\File;
 
-class PhotoController extends Controller {
+class MediaController extends Controller {
 
-    private $thumbnails;
+    private $media;
     private $access_key;
     private $secret;
     private $bucket;
@@ -29,9 +29,9 @@ class PhotoController extends Controller {
      * @return Response
      */
     public function index() {
-//        Cache::forget('thumbnails');
-        if (Cache::has('thumbnails')) {
-            $this->thumbnails = Cache::get('thumbnails');
+        Cache::forget('media');
+        if (Cache::has('media')) {
+            $this->media = Cache::get('media');
         } else {
             $this->getThumbnails();
         }
@@ -60,26 +60,23 @@ class PhotoController extends Controller {
                     $key = $object['Key'];
                     $extension = File::extension($key);
                     $file_name = str_replace('"', '', $object['ETag']) . '.' . $extension;
-                    $this->setThumbnails($key, $extension, $file_name);
+                    $this->setMedia($key, $extension, $file_name);
                 }
                 unset($object);
             }
         }
         //Cache me.
-        \Cache::forever('thumbnails', $this->thumbnails);
+        \Cache::forever('media', $this->media);
     }
 
-    //Cache thumbnails, into their directory structure.
-    //@TODO - we are moving this over to the photo controller, so that
-    // We pull the latest directory info and cache it. This will stop us from 
-    // having to re-load this, and get new info on the fly.
-    private function setThumbnails($key, $extension, $file_name) {
-        if (preg_match('/\.(jpg|jpeg|bpm|png|gif|)$/i', $key)) {
+    //Cache media, into their directory structure.
+    private function setMedia($key, $extension, $file_name) {
+        if (preg_match('/\.(jpg|jpeg|bpm|png|gif|mov|mp4)$/i', $key)) {
             //Add To Tumbnails array.
             $key = str_replace($this->prefix, '', $key);
             $notated = str_replace('/', '.', rtrim($key, '.' . $extension));
             if (!empty($notated)) {
-                array_set($this->thumbnails, ltrim($notated, '.'), array(
+                array_set($this->media, ltrim($notated, '.'), array(
                     'key' => $key,
                     'file_name' => $file_name
                 ));
@@ -89,10 +86,10 @@ class PhotoController extends Controller {
 
     //Get all the items we have, and normalize them.
     private function response() {
-        //@Look for a path, that we can pull from.
+        //Look for a path, that we can pull from.
         $path = Request::path();
-        $path = str_replace('/', '.', ltrim(urldecode($path), 'api/photos/'));
-        $items = array_get($this->thumbnails, $path);
+        $path = str_replace('/', '.', ltrim(urldecode($path), 'api/media/'));
+        $items = array_get($this->media, $path);
         if (!empty($path) && !strstr($path, '.')) {
             //We are getting all the folders, return a random item.
             //This does not have proper depth in it yet.
@@ -105,10 +102,10 @@ class PhotoController extends Controller {
                 );
             }
         }
-        //If we are on /api/photos then show all first level items.
+        //If we are on /api/media then show all first level items.
         if (empty($path)) {
             $items = array();
-            foreach ($this->thumbnails as $key => $item) {
+            foreach ($this->media as $key => $item) {
                 $rand = array_rand($item);
                 $child = array_rand($item[$rand]);
                 $items[$key] = array(

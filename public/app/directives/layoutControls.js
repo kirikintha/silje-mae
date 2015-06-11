@@ -1,5 +1,5 @@
 //Control Buttons for layout.
-angular.module('PhotoApp.directives')
+angular.module('MediaApp.directives')
         .directive('layoutControls', function () {
             return {
                 restrict: 'E',

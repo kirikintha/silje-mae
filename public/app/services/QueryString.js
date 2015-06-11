@@ -1,5 +1,5 @@
 //Query String Factory.
-angular.module('PhotoApp.services').factory('qs', ['lodash',
+angular.module('MediaApp.services').factory('qs', ['lodash',
     function (lodash) {
         return {
             make: function (obj, prefix) {

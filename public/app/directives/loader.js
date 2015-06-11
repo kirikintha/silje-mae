@@ -1,5 +1,5 @@
 //Loading directive.
-angular.module('PhotoApp.directives')
+angular.module('MediaApp.directives')
         .directive('loader', ['$rootScope', function ($rootScope) {
                 return {
                     restrict: 'A',

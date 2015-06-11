@@ -1,5 +1,5 @@
 //Breadcrumbs.
-angular.module('PhotoApp.directives')
+angular.module('MediaApp.directives')
         .directive('breadcrumbs', ['$location', function ($location) {
         return {
             restrict: 'E',

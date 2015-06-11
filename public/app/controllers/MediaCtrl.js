@@ -1,15 +1,15 @@
-angular.module('PhotoApp.controllers')
-        .controller('PhotoCtrl', ['$rootScope', '$scope', '$http', '$routeParams', '$animate', '$timeout', '_', 'detect',
+angular.module('MediaApp.controllers')
+        .controller('MediaCtrl', ['$rootScope', '$scope', '$http', '$routeParams', '$animate', '$timeout', '_', 'detect',
             function ($rootScope, $scope, $http, $routeParams, $animate, $timeout, _, detect) {
                 $scope.limit = 50;
                 $scope.current = _.isUndefined($routeParams.page) ? 1 : parseInt($routeParams.page);
                 $scope.layout = _.isUndefined($routeParams.layout) ? 'tile' : $routeParams.layout;
                 //Make breacrumb.
                 $scope.path = _.isUndefined($routeParams.path) ? '' : $routeParams.path;
-                $scope.photos = [];
+                $scope.media = [];
                 $scope.detect = detect.data;
-                //Look for photos path.
-                var path = _.isUndefined($routeParams.path) ? '/api/photos' : '/api/photos/' + $routeParams.path;
+                //Look for media path.
+                var path = _.isUndefined($routeParams.path) ? '/api/media' : '/api/media/' + $routeParams.path;
                 //Get Photos.
                 $rootScope.loading = true;
                 $scope.dataLoaded = false;
@@ -23,7 +23,7 @@ angular.module('PhotoApp.controllers')
                                 $scope.total = _.size(data);
                                 var offset = ($scope.current - 1) * $scope.limit;
                                 var end = $scope.current * $scope.limit;
-                                $scope.photos = _.slice(data, offset, end);
+                                $scope.media = _.slice(data, offset, end);
                                 $scope.dataLoaded = true;
                                 $rootScope.loading = false;
                                 $scope.pager = {

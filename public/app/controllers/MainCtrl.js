@@ -10,7 +10,7 @@
  */
 'use strict';
 
-angular.module('PhotoApp.controllers')
+angular.module('MediaApp.controllers')
         .controller('MainCtrl', ['$scope', '$http', '$route', '$routeParams', '$location', '_',
             function ($scope, $http, $route, $routeParams, $location, _) {
                 var layout = $location.search().layout;
@@ -40,6 +40,6 @@ angular.module('PhotoApp.controllers')
                         });
                 //Testing.
                 $scope.link = function (path) {
-                    return 'photos/' + path + '?layout=' + $scope.layout;
+                    return 'media/' + path + '?layout=' + $scope.layout;
                 };
             }]);

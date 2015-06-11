@@ -11,9 +11,9 @@
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="dropdown" ng-class="checkNavActive('photos')">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Photos <span class="caret"></span></a>
-                    <menu-photos></menu-photos>
+                <li class="dropdown" ng-class="checkNavActive('media')">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Media <span class="caret"></span></a>
+                    <menu-media></menu-media>
                 </li>
             </ul>
         </div><!--/.nav-collapse -->

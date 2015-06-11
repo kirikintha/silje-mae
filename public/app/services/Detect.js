@@ -6,7 +6,7 @@
 
 'use strict';
 
-angular.module('PhotoApp.services')
+angular.module('MediaApp.services')
         .service('Detect', ['$http',
             function ($http) {
                 return {

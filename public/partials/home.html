@@ -88,13 +88,7 @@
         </svg>
     </div>
     <!--    Silje Mae Video-->
-    <video id="video-silje-mae" class="video-js vjs-default-skin vjs-big-play-centered video-js-fullscreen"
-           controls preload="auto" width="640" height="264"
-           poster="">
-        <source src="https://s3.amazonaws.com/silje-mae/videos/silje-mae-laughing.mp4" type='video/mp4' />
-        <source src="https://s3.amazonaws.com/silje-mae/videos/silje-mae-laughing.flv" type='video/x-flv' />
-        <p class="vjs-no-js">If you have problems fix your chrome if you have IE throw it away, and check out the IE Sucks chrome Extension that mocks its lack of function <a href="http://videojs.com/html5-video-support/" target="_blank">support HTML5 video</a></p>
-    </video>
+    <video-player video-settings="videoSettings"></video-player>
     <div ng-if="detect.isMobile === false" id="bunny-bean">
         <img src="/images/bunny-bean.png" />
         <svg

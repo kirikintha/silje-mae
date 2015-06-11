@@ -15,7 +15,7 @@
                focus-on-select="true"
                variable-width="true"
                as-nav-for=".slider-for">
-            <div ng-repeat="item in photos track by $index">
+            <div ng-repeat="item in media track by $index">
                 <img class="image-responsive" data-lazy="{{image.thumbnail(item.file_name)}}" />
             </div>
         </slick>

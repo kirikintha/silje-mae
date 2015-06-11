@@ -2,7 +2,7 @@
     <!--Pager-->
     <pager></pager>
     <!--Photos-->
-    <div ng-repeat="item in photos track by $index" class="col-md-12 repeat-animate list">
+    <div ng-repeat="item in media track by $index" class="col-md-12 repeat-animate list">
         <div ng-show="item.title !== undefined" class="thumbnail">
             <a ng-href="{{link(item.path)}}">
                 <h5>{{item.title}}</h5>

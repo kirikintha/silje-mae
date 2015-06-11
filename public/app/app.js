@@ -1,26 +1,26 @@
 /**
- * Silje's Photo App.
+ * Silje's Media App.
  *  This is the main file for setting up the app. This takes into account having
  *  services, controllers, filters and directives.
  *  Using this as a guide: https://github.com/mgechev/angularjs-style-guide#modules
  */
 
-angular.module('PhotoApp', [
+angular.module('MediaApp', [
     //Angular Modules.
     'ngRoute', 'ngAnimate', 'ngLodash', 'dotjem.angular.tree', 'slick',
     //Photo App modules.
-    'PhotoApp.services', 'PhotoApp.filters', 'PhotoApp.directives', 'PhotoApp.controllers'
+    'MediaApp.services', 'MediaApp.filters', 'MediaApp.directives', 'MediaApp.controllers'
 ]);
 
 //Route Configuration.
-angular.module('PhotoApp')
-        .config(['$routeProvider', '$locationProvider',
-            function ($routeProvider, $locationProvider) {
+angular.module('MediaApp')
+        .config(['$routeProvider', '$locationProvider', '$sceDelegateProvider',
+            function ($routeProvider, $locationProvider, $sceDelegateProvider) {
                 //Photo config.
                 var photosConfig = {
-                    templateUrl: '/partials/photos.html',
-                    controller: 'PhotoCtrl',
-                    controllerAs: 'photo',
+                    templateUrl: '/partials/media.html',
+                    controller: 'MediaCtrl',
+                    controllerAs: 'media',
                     resolve: {
                         detect: function (Detect) {
                             return Detect.fetch();
@@ -39,18 +39,26 @@ angular.module('PhotoApp')
                                 }
                             }
                         })
-                        .when('/photos', photosConfig)
-                        .when('/photos/:path*', photosConfig)
+                        .when('/media', photosConfig)
+                        .when('/media/:path*', photosConfig)
                         .otherwise({
                             redirectTo: '/home'
                         });
                 //Set HTML 5 mode.
                 $locationProvider.html5Mode(true);
+                //Delegate S3 as a trusted source.
+                $sceDelegateProvider.resourceUrlWhitelist([
+                    // Allow same origin resource loads.
+                    'self',
+                    // Allow loading from our assets domain.  Notice the difference between * and **.
+                    'http://s3.amazonaws.com/silje-mae/**',
+                    'https://s3.amazonaws.com/silje-mae/**'
+                ]);
             }]);
 
 
 //Modules
-angular.module('PhotoApp.services', []);
-angular.module('PhotoApp.filters', []);
-angular.module('PhotoApp.directives', []);
-angular.module('PhotoApp.controllers', []);
+angular.module('MediaApp.services', []);
+angular.module('MediaApp.filters', []);
+angular.module('MediaApp.directives', []);
+angular.module('MediaApp.controllers', []);

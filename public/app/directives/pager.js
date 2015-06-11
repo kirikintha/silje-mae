@@ -1,5 +1,5 @@
 //Photo Layout.
-angular.module('PhotoApp.directives')
+angular.module('MediaApp.directives')
         .directive('pager', ['$location', '$routeParams', 'qs', function ($location, $routeParams, qs) {
                 return {
                     restrict: 'E',

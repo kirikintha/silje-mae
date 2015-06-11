@@ -23,8 +23,8 @@ class MediaUpdateCommand extends Command {
     private $s3;
     private $tmp = '/tmp';
     private $caches = array(
-        'thumbnails',
-        'menus'
+        'media',
+        'menus',
     );
     private $video;
 
@@ -40,7 +40,7 @@ class MediaUpdateCommand extends Command {
      *
      * @var string
      */
-    protected $description = 'Update photos from S3.';
+    protected $description = 'Update media from S3.';
 
     public function __construct(AwsS3ClientInterface $s3) {
         parent::__construct();
@@ -63,9 +63,9 @@ class MediaUpdateCommand extends Command {
     public function fire() {
         //Start Queue.
         $this->info(sprintf('Loading: %s', \App::environment()));
-        $this->info('Starting photo update.');
-        $this->photoUpdate();
-        $this->info('Finished running photo update.');
+        $this->info('Starting media update.');
+        $this->mediaUpdate();
+        $this->info('Finished running media update.');
     }
 
     /**
@@ -86,7 +86,7 @@ class MediaUpdateCommand extends Command {
         return array();
     }
 
-    private function photoUpdate() {
+    private function mediaUpdate() {
         //Just make the API here, no need to get fancy.
         $this->s3->request = array(
             'access_key' => \Crypt::encrypt($this->access_key),
@@ -99,8 +99,8 @@ class MediaUpdateCommand extends Command {
         if ($this->s3->response['connected'] === true) {
             //Show how many records we imported.
             $this->s3->listObjects();
-            //Tell us how many photos we found.
-            $this->info(sprintf('Found %d photos in this bucket', $this->s3->count));
+            //Tell us how many media items we found.
+            $this->info(sprintf('Found %d media items in this bucket', $this->s3->count));
             //Update images.
             $this->update();
         }
@@ -127,18 +127,18 @@ class MediaUpdateCommand extends Command {
             //Finish.
             $progress->finish();
             //Show how many records we imported.
-            $this->info(sprintf("\nFinished importing %d photos", $this->s3->total));
+            $this->info(sprintf("\nFinished importing %d media items", $this->s3->total));
             //Post Update.
             $this->postUpdate();
         }
     }
 
-    //Kill the cache, and re-prime the photos url.
+    //Kill the cache, and re-prime the media url.
     private function postUpdate() {
         $this->info('Import finished, cleaning up.');
         $this->killCache();
         $this->prime('menus');
-        $this->prime('photos');
+        $this->prime('media');
     }
 
     //Set thumbnail.

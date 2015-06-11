@@ -8,14 +8,15 @@
 
 'use strict';
 
-angular.module('PhotoApp.controllers')
+angular.module('MediaApp.controllers')
         .controller('HomeCtrl', ['$scope', '$routeParams', 'detect', function ($scope, $routeParams, detect) {
                 //Get the device we are using, so we can detect what needs to be shown.
                 $scope.detect = detect.data;
-                //Start the video.
-                var player_settings = {example_option: true, width: "auto", height: "auto", techOrder: ["html5", "flash"]};
-                var player = videojs('video-silje-mae', player_settings);
-                $scope.$on('$destroy', function () {
-                    player.dispose();
-                });
+                //Player Source.
+                $scope.videoSettings = {
+                    id: 'video-silje-mae-laughing',
+                    poster: 'https://s3.amazonaws.com/silje-mae/posters/silje-mae-laughing.jpg',
+                    mp4: 'https://s3.amazonaws.com/silje-mae/videos/silje-mae-laughing.mp4',
+                    flv: 'https://s3.amazonaws.com/silje-mae/videos/silje-mae-laughing.flv'
+                };
             }]);

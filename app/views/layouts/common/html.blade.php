@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="PhotoApp" ng-controller="MainCtrl as main">
+<html lang="en" ng-app="MediaApp" ng-controller="MainCtrl as main">
     @include('layouts.common.head')
 
     <body loader>
