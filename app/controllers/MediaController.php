@@ -29,7 +29,6 @@ class MediaController extends Controller {
      * @return Response
      */
     public function index() {
-        Cache::forget('media');
         if (Cache::has('media')) {
             $this->media = Cache::get('media');
         } else {
