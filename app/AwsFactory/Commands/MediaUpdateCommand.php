@@ -3,6 +3,10 @@
 /**
  * @file RunQueueCommand.php
  *  This is to run queues that have been created.
+ * @TODO - create video posters, and upload to "posters" we'll let the video
+ *  player take over. We also need thumbnails and fulls too. Just make em all.
+ * @TODO - Make sure that the layouts understand when to make a videoplayer and when not to.
+ * @TODO - when we have a media item that it constructs the proper videoSettings array.
  */
 
 namespace AwsFactory\Commands;

@@ -1,4 +1,3 @@
-
 //Lightbox.
 angular.module('MediaApp.directives')
         .directive('lightbox', ['$animate', function ($animate) {
@@ -30,8 +29,6 @@ angular.module('MediaApp.directives')
                             },
                             image: function (file_name, type) {
                                 if (file_name !== undefined && type !== undefined) {
-                                    //Convert videos to their poster thumbnail
-                                    file_name = file_name.replace(/\.(mp4|mov)/i, '.jpg');
                                     return this.base + type + '/' + file_name;
                                 }
                                 return '';

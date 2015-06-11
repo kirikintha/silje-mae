@@ -28,7 +28,6 @@ angular.module('MediaApp.directives')
                     },
                     controller: function ($scope) {
                         $scope.$on('$destroy', function () {
-                            console.debug('Destroying Players', videoPlayers);
                             _.each(videoPlayers, function (player) {
                                 player.dispose();
                             });
