@@ -1,0 +1,7 @@
+<div  class="thumbnail">
+    <a ng-if="item.title !== undefined" ng-href="{{link(item.path)}}">
+        <h5>{{item.title}}</h5>
+        <img class="img-responsive" ng-src="{{image.thumbnail(item.file_name)}}" />
+    </a>
+    <a ng-if="item.title == undefined" ng-click="lightbox(image.full(item.file_name))"><img class="img-responsive" ng-src="{{image.thumbnail(item.file_name)}}" /></a>
+</div>

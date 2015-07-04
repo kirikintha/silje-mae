@@ -28,7 +28,9 @@ class MenuController extends Controller {
      * @return Response
      */
     public function index() {
-//        Cache::forget('menus');
+        if (Input::get('forget')) {
+            Cache::forget('menus');
+        }
         if (Cache::has('menus')) {
             $this->menus = Cache::get('menus');
         } else {

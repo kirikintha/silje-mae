@@ -140,9 +140,7 @@ class MediaUpdateCommand extends Command {
     //Kill the cache, and re-prime the media url.
     private function postUpdate() {
         $this->info('Import finished, cleaning up.');
-        $this->killCache();
-        $this->prime('menus');
-        $this->prime('media');
+        $this->reCache();
     }
 
     //Set thumbnail.
@@ -224,8 +222,13 @@ class MediaUpdateCommand extends Command {
     private function makeVideos($key, $file_name, $extension) {
         $uri = $this->download($key, $file_name);
         $this->probe($uri);
+        //Convert MP4 to something easier to stream and rotate if necessary.
         $this->makeMP4($uri, $file_name, $extension);
+        //Make a poster image, from the converted mp4.
+        $this->makePoster($file_name, $extension);
+        //Lastly, make a compatible FLV.
         $this->makeFLV($file_name, $extension);
+        //Finish, clean up all files created.
         $this->finish($uri);
         //Add to total of imported items.
         $this->s3->total ++;
@@ -333,8 +336,6 @@ class MediaUpdateCommand extends Command {
 
     //Make an FLV
     private function makeFLV($file_name, $extension) {
-        //@TODO - we will have to take the MP4 version of the file, as this has
-        // been rotated and scaled.
         //Make FLV
         $this->video['out'] = $this->tmp . '/' . str_replace($extension, 'flv', $file_name);
         //Exec FFMEG rotation.
@@ -342,6 +343,15 @@ class MediaUpdateCommand extends Command {
         exec($command);
         $this->video['created'][] = $this->video['out'];
         $this->putVideo($this->video['out']);
+    }
+
+    //Make a poster image for the video.
+    private function makePoster($file_name, $extension) {
+        $out = $this->tmp . '/' . str_replace($extension, 'jpg', $file_name);
+        $command = sprintf('ffmpeg -ss 00:00:01 -i %s -vf "scale=640:-1" -vframes 1 %s 2>/dev/null', $this->video['in'], $out);
+        exec($command);
+        $this->video['created'][] = $out;
+        $this->putPoster($out);
     }
 
     //Exec FFMPEG Command.
@@ -372,19 +382,37 @@ class MediaUpdateCommand extends Command {
             $this->s3->put($options);
         }
     }
+    
+    //Put a poster to S3
+    private function putPoster($file_name) {
+        $bytes = File::size($file_name);
+        if ($bytes > 0) {
+            //Send the 
+            $info = new \SplFileInfo($file_name);
+            $key = sprintf('posters/%s', $info->getFilename());
+            //Send File back up to S3.
+            $options = array(
+                'Bucket' => $this->s3->request['bucket'],
+                'Key' => $key,
+                'CacheControl' => 'max-age=172800',
+                'SourceFile' => $file_name,
+            );
+            $this->s3->put($options);
+        }
+    }
 
     //Kill all caches.
-    private function killCache() {
+    private function reCache() {
         $this->info('Killing Cache');
         //Kill all caches, so they run on the next page load.
         foreach ($this->caches as $cache) {
-            \Cache::forget($cache);
+            $this->prime($cache);
         }
     }
 
     //Prime the cache.
     private function prime($location = null) {
-        $url = \Config::get('app.url') . '/api/' . $location;
+        $url = sprintf('%s/api/%s?forget=true', \Config::get('app.url'), $location);
         $this->info(sprintf('Priming Cache on: ' . $url));
         $curl = curl_init();
         curl_setopt_array($curl, array(

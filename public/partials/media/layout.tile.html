@@ -3,16 +3,9 @@
     <pager></pager>
     <!--Photos-->
     <div ng-repeat="item in media track by $index" class="col-md-4 repeat-animate tile">
-        <div ng-if="item.title !== undefined" class="thumbnail">
-            <a ng-href="{{link(item.path)}}">
-                <h5>{{item.title}}</h5>
-                <img class="img-responsive" ng-src="{{image.thumbnail(item.file_name)}}" />
-            </a>
-        </div>
-        <div ng-if="item.title == undefined" class="thumbnail">
-            <a ng-click="lightbox(image.full(item.file_name))"><img class="img-responsive" ng-src="{{image.thumbnail(item.file_name)}}" /></a>
-        </div>
-    </div> 
+        <photos ng-if="item.type === 'image'" image-style="full"></photos>
+        <video-player ng-if="item.type === 'video'" video-settings="item.videoSettings"></video-player>
+    </div>
     <!--Pager-->
     <pager></pager>
 </div>

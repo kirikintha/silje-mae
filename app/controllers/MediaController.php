@@ -10,6 +10,8 @@ class MediaController extends Controller {
     private $secret;
     private $bucket;
     private $prefix;
+    //Not sure if this is in the S3 service provider.
+    private $url = 'https://s3.amazonaws.com';
     private $s3;
 
     public function __construct(AwsS3ClientInterface $s3) {
@@ -29,6 +31,9 @@ class MediaController extends Controller {
      * @return Response
      */
     public function index() {
+        if (Input::get('forget')) {
+            Cache::forget('media');
+        }
         if (Cache::has('media')) {
             $this->media = Cache::get('media');
         } else {
@@ -71,16 +76,34 @@ class MediaController extends Controller {
     //Cache media, into their directory structure.
     private function setMedia($key, $extension, $file_name) {
         if (preg_match('/\.(jpg|jpeg|bpm|png|gif|mov|mp4)$/i', $key)) {
-            //Add To Tumbnails array.
             $key = str_replace($this->prefix, '', $key);
             $notated = str_replace('/', '.', rtrim($key, '.' . $extension));
             if (!empty($notated)) {
-                array_set($this->media, ltrim($notated, '.'), array(
+                $media = array(
                     'key' => $key,
-                    'file_name' => $file_name
-                ));
+                    'file_name' => $file_name,
+                    'type' => $this->getType($extension)
+                );
+                if ($media['type'] === 'video') {
+                    $base = pathinfo($file_name, PATHINFO_FILENAME);
+                    $media['videoSettings'] = array(
+                        'id' => sprintf('video-%s', $base),
+                        'poster' => sprintf('%s/posters/%s.jpg', $this->url, $base),
+                        'mp4' => sprintf('%s/%s/videos/%s.mp4', $this->url, $this->bucket, $base),
+                        'flv' => sprintf('%s/%s/videos/%s.flv', $this->url, $this->bucket, $base),
+                    );
+                }
+                array_set($this->media, ltrim($notated, '.'), $media);
             }
         }
+    }
+
+    //Get the media type, image or video.
+    private function getType($extension) {
+        if (preg_match('/(mov|mp4)$/i', $extension)) {
+            return 'video';
+        }
+        return 'image';
     }
 
     //Get all the items we have, and normalize them.
