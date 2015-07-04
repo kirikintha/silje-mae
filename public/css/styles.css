@@ -155,7 +155,7 @@ ul.nav li > ul {
     text-decoration: none;
 }
 
-.tile .thumbnail a {
+.thumbnail a {
     cursor: pointer;
 }
 

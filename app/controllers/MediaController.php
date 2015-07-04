@@ -70,7 +70,8 @@ class MediaController extends Controller {
             }
         }
         //Cache me.
-        \Cache::forever('media', $this->media);
+        $expires = Carbon::now()->addMinutes(1440);
+        \Cache::put('media', $this->media, $expires);
     }
 
     //Cache media, into their directory structure.
@@ -116,28 +117,48 @@ class MediaController extends Controller {
             //We are getting all the folders, return a random item.
             //This does not have proper depth in it yet.
             foreach ($items as $key => $item) {
-                $rand = array_rand($item);
-                $items[$key] = array(
-                    'path' => $path . '/' . $key,
-                    'title' => rtrim($key, '/'),
-                    'file_name' => $item[$rand]['file_name'],
-                );
+                $items[$key] = $this->getItem($item, $path, $key);
             }
         }
         //If we are on /api/media then show all first level items.
         if (empty($path)) {
             $items = array();
             foreach ($this->media as $key => $item) {
-                $rand = array_rand($item);
-                $child = array_rand($item[$rand]);
-                $items[$key] = array(
-                    'path' => $path . $key,
-                    'title' => ltrim(rtrim($key, '/'), '/'),
-                    'file_name' => $item[$rand][$child]['file_name'],
-                );
+                $items[$key] = $this->getAll($item, $path, $key);
             }
         }
         return Response::json(array_values($items));
+    }
+
+    //Get Item.
+    private function getItem($items, $path, $key) {
+        $rand = array_rand($items);
+        $output = array(
+            'path' => $path . '/' . $key,
+            'title' => rtrim($key, '/'),
+            'file_name' => $items[$rand]['file_name'],
+            'type' => $items[$rand]['type'],
+        );
+        if (!empty($items[$rand]['videoSettings'])) {
+            $output['videoSettings'] = $items[$rand]['videoSettings'];
+        }
+        return $output;
+    }
+
+    //Ugh, I hate recursion.
+    private function getAll($items, $path, $key) {
+        $rand = array_rand($items);
+        $child = array_rand($items[$rand]);
+        $output = array(
+            'path' => $path . $key,
+            'title' => ltrim(rtrim($key, '/'), '/'),
+            'file_name' => $items[$rand][$child]['file_name'],
+            'type' => $items[$rand][$child]['type'],
+        );
+        if (!empty($items[$rand][$child]['videoSettings'])) {
+            $output['videoSettings'] = $items[$rand][$child]['videoSettings'];
+        }
+        return $output;
     }
 
 }

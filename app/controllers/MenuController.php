@@ -64,7 +64,8 @@ class MenuController extends Controller {
             }
         }
         //Cache me.
-        \Cache::forever('menus', $this->menus);
+        $expires = Carbon::now()->addMinutes(1440);
+        \Cache::forever('menus', $this->menus, $expires);
     }
 
     //Set Menu Item.

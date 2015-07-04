@@ -17,7 +17,7 @@ angular.module('MediaApp')
         .config(['$routeProvider', '$locationProvider', '$sceDelegateProvider',
             function ($routeProvider, $locationProvider, $sceDelegateProvider) {
                 //Photo config.
-                var photosConfig = {
+                var mediaConfig = {
                     templateUrl: '/partials/media.html',
                     controller: 'MediaCtrl',
                     controllerAs: 'media',
@@ -39,8 +39,8 @@ angular.module('MediaApp')
                                 }
                             }
                         })
-                        .when('/media', photosConfig)
-                        .when('/media/:path*', photosConfig)
+                        .when('/media', mediaConfig)
+                        .when('/media/:path*', mediaConfig)
                         .otherwise({
                             redirectTo: '/home'
                         });
