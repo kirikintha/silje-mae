@@ -37,6 +37,7 @@ angular.module('MediaApp.directives')
                             _.each(videoPlayers, function (player) {
                                 player.dispose();
                             });
+                            videoPlayers = [];
                         }
                     }
                 };
