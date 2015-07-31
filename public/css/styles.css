@@ -42,7 +42,7 @@ div.loader {
     right: -40px;
     top: -26px;
     width: 300px;
-    z-index: 9999;
+    z-index: 1029;
 }
 
 #smiling-bean img {
@@ -51,7 +51,6 @@ div.loader {
     right: -17px;
     top: 7px;
     width: 235px;
-    z-index: 9999;
 }
 
 #bunny-bean {
@@ -61,7 +60,7 @@ div.loader {
     overflow: hidden;
     position: fixed;
     width: 50%;
-    z-index: 9999;
+    z-index: 1029;
 }
 
 #bunny-bean img {
