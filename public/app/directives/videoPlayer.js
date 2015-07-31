@@ -10,7 +10,6 @@ angular.module('MediaApp.directives')
                     },
                     link: function (scope, element, attr) {
                         var video_settings = scope.videoSettings();
-                        console.debug(video_settings);
                         if (!_.isEmpty(video_settings)) {
                             scope.id = video_settings.id;
                             scope.poster = video_settings.poster;
@@ -35,6 +34,7 @@ angular.module('MediaApp.directives')
                         });
                         //Privately destroy vidoplayers
                         function disposeVideoPlayers() {
+                            console.debug(videoPlayers);
                             _.each(videoPlayers, function (player) {
                                 console.log(player);
                                 player.dispose();
