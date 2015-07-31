@@ -33,12 +33,10 @@ angular.module('MediaApp.directives')
                         $scope.$on('$destroy', function () {
                             disposeVideoPlayers();
                         });
-                        $scope.$on('$routeUpdate', function () {
-                            disposeVideoPlayers();
-                        });
                         //Privately destroy vidoplayers
                         function disposeVideoPlayers() {
                             _.each(videoPlayers, function (player) {
+                                console.log(player);
                                 player.dispose();
                             });
                         }
