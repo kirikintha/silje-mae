@@ -35,8 +35,10 @@ angular.module('MediaApp.directives')
                         //Privately destroy vidoplayers
                         function disposeVideoPlayers() {
                             _.each(videoPlayers, function (player) {
-                                console.debug(player);
-                                player.dispose();
+                                player.pause();
+                                $timeout(function () {
+                                    player.dispose();
+                                }, 0); 
                             });
                         }
                     }
