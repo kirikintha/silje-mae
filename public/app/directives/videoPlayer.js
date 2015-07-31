@@ -36,7 +36,6 @@ angular.module('MediaApp.directives')
                         function disposeVideoPlayers() {
                             console.debug(videoPlayers);
                             _.each(videoPlayers, function (player) {
-                                console.log(player);
                                 player.dispose();
                             });
                         }
