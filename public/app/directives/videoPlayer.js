@@ -10,6 +10,7 @@ angular.module('MediaApp.directives')
                     },
                     link: function (scope, element, attr) {
                         var video_settings = scope.videoSettings();
+                        console.debug(video_settings);
                         if (!_.isEmpty(video_settings)) {
                             scope.id = video_settings.id;
                             scope.poster = video_settings.poster;
@@ -30,10 +31,17 @@ angular.module('MediaApp.directives')
                     },
                     controller: function ($scope) {
                         $scope.$on('$destroy', function () {
+                            disposeVideoPlayers();
+                        });
+                        $scope.$on('$routeUpdate', function () {
+                            disposeVideoPlayers();
+                        });
+                        //Privately destroy vidoplayers
+                        function disposeVideoPlayers() {
                             _.each(videoPlayers, function (player) {
                                 player.dispose();
                             });
-                        });
+                        }
                     }
                 };
             }]);
