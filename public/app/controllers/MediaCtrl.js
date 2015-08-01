@@ -31,6 +31,11 @@ angular.module('MediaApp.controllers')
                                     current: $scope.current,
                                     limit: $scope.limit
                                 };
+                                //If our layout is carousel, then attach the carousel before change event.
+                                if ($scope.layout === 'carousel') {
+                                    var carousel = angular.element('.ng-slick');
+                                    console.debug(carousel);
+                                }
                             });
                 }, 1000);
             }]);

@@ -1,7 +1,6 @@
 angular.module('MediaApp.directives')
         .directive('videoPlayer', ['_', '$timeout', function (_, $timeout) {
                 var videoPlayers = [];
-                var carousel = angular.element('.ng-slick');
                 return {
                     restrict: 'EA',
                     replace: true,
@@ -34,11 +33,6 @@ angular.module('MediaApp.directives')
                         $scope.$on('$destroy', function () {
                             disposeVideoPlayers();
                         })
-                        //Look for the carousel, and apply pause to videos when they
-                        // change slides.
-                        if (!_.isEmpty(carousel)) {
-                            console.debug('Carousel Found');
-                        }
                         //Privately destroy video players
                         function disposeVideoPlayers() {
                             _.each(videoPlayers, function (player) {
