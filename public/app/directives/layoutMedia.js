@@ -10,7 +10,6 @@ angular.module('MediaApp.directives')
             controller: function($scope) {
                 //Layout Specific Changes
                 if ($scope.layout === 'carousel') {
-                    console.debug('Carousel found');
                     $scope.onBeforeSlideChange = function() {
                         console.debug('slide change');
                     };
