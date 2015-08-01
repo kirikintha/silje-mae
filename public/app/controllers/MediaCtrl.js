@@ -33,7 +33,7 @@ angular.module('MediaApp.controllers')
                                 };
                                 //If our layout is carousel, then attach the carousel before change event.
                                 if ($scope.layout === 'carousel') {
-                                    var carousel = angular.element('.ng-slick');
+                                    var carousel = angular.element('.slider-nav, .slider-for');
                                     console.debug(carousel);
                                 }
                             });
