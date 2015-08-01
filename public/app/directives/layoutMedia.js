@@ -9,11 +9,13 @@ angular.module('MediaApp.directives')
             },
             controller: function($scope) {
                 //Layout Specific Changes
-                if ($scope.layout === 'carousel') {
-                    $scope.$watch('beforeChange', function(event, slick, currentSlide, nextSlide) {
-                        console.debug('slide change');
+                angular.element('document')
+                    .on('beforeChange', '.ng-slick', function() {
+                        console.debug('before change');
+                    })
+                    .on('afterChange', '.ng-slick', function() {
+                        console.debug('after change');
                     });
-                }
             }
         };
     }]);
