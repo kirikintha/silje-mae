@@ -8,11 +8,12 @@ angular.module('MediaApp.directives')
                 return '/partials/media/layout.' + attr.type + '.html';
             },
             controller: function($scope) {
-                //If our layout is carousel, then attach the carousel before change event.
+                //Layout Specific Changes
                 if ($scope.layout === 'carousel') {
-                    $scope.onBeforeChange = function() {
-                        console.debug('I am on before cahnge.');
-                    }
+                    console.debug('Carousel found');
+                    $scope.onBeforeSlideChange = function() {
+                        console.debug('slide change');
+                    };
                 }
             }
         };
