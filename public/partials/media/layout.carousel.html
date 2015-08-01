@@ -31,6 +31,7 @@
                    slides-to-scroll="1"
                    arrows="false"
                    fade="true"
+                   before-change="beforeSlideChange"
                    as-nav-for=".slider-nav">
                 <div ng-repeat="item in media track by $index">
                     <photos ng-if="item.type === 'image'" image-style="full"></photos>
