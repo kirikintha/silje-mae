@@ -14,10 +14,8 @@ angular.module('MediaApp.directives')
                     // accessing jQuery directly. Weird.
                     $(document)
                         .on('beforeChange', '.ng-slick', function() {
-                            console.debug('before change');
-                        })
-                        .on('afterChange', '.ng-slick', function() {
-                            console.debug('after change');
+                            //Broadcast video pause event.
+                            $scope.broadcast('videoPlayerPauseAll');
                         });
                 }
 
