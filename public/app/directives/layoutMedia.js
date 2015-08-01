@@ -9,13 +9,17 @@ angular.module('MediaApp.directives')
             },
             controller: function($scope) {
                 //Layout Specific Changes
-                $(document)
-                    .on('beforeChange', '.ng-slick', function() {
-                        console.debug('before change');
-                    })
-                    .on('afterChange', '.ng-slick', function() {
-                        console.debug('after change');
-                    });
+                if ($scope.layout === 'carousel') {
+                    //I could not get this to work any other way than
+                    // accessing jQuery directly. Weird.
+                    $(document)
+                        .on('beforeChange', '.ng-slick', function() {
+                            console.debug('before change');
+                        })
+                        .on('afterChange', '.ng-slick', function() {
+                            console.debug('after change');
+                        });
+                }
 
             }
         };
