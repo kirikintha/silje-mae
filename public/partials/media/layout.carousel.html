@@ -15,8 +15,9 @@
                focus-on-select="true"
                variable-width="true"
                as-nav-for=".slider-for">
-            <div ng-repeat="item in media track by $index" ng-if="item.type === 'image'">
-                <photos ng-if="item.type === 'image'" image-style="full"></photos>
+            <div ng-repeat="item in media track by $index">
+                <img ng-if="item.type === 'image'" class="image-responsive" data-lazy="{{image.thumbnail(item.file_name)}}" />
+                <img ng-if="item.type === 'video'" class="image-responsive" data-lazy="{{image.thumbnail(item.videoSettings.poster)}}" />
             </div>
         </slick>
         <div class="col-md-6 col-md-offset-3">
@@ -30,8 +31,9 @@
                    arrows="false"
                    fade="true"
                    as-nav-for=".slider-nav">
-                <div ng-repeat="item in media track by $index" ng-if="item.type === 'image'">
+                <div ng-repeat="item in media track by $index">
                     <photos ng-if="item.type === 'image'" image-style="full"></photos>
+                    <video-player ng-if="item.type === 'video'" video-settings="item.videoSettings"></video-player>
                 </div>
             </slick>
         </div>
