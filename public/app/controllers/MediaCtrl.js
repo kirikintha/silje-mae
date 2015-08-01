@@ -33,4 +33,8 @@ angular.module('MediaApp.controllers')
                                 };
                             });
                 }, 1000);
+                //Video events.
+                $scope.beforeSlideChange = function () {
+                    console.debug('Before slide changes');
+                }
             }]);

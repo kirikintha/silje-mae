@@ -14,6 +14,7 @@
                center-mode="true"
                focus-on-select="true"
                variable-width="true"
+               before-change="beforeSlideChange"
                as-nav-for=".slider-for">
             <div ng-repeat="item in media track by $index">
                 <img ng-if="item.type === 'image'" class="image-responsive" data-lazy="{{image.thumbnail(item.file_name)}}" />
