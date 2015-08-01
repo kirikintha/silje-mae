@@ -4,7 +4,7 @@
     <div class="col-md-12">
         <!--Photos Carousel-->
         <!--Slider Nav-->
-        <slick class="ng-slick slider-nav" ng-if="dataLoaded" init-onload="false" data="dataLoaded" infinite="true" lazy-load="progressive" slides-to-show="3" slides-to-scroll="1" center-mode="true" focus-on-select="true" variable-width="true" on-before-change="onbeforeSlideChange()" as-nav-for=".slider-for">
+        <slick class="ng-slick slider-nav" ng-if="dataLoaded" init-onload="false" data="dataLoaded" infinite="true" lazy-load="progressive" slides-to-show="3" slides-to-scroll="1" center-mode="true" focus-on-select="true" variable-width="true" on-before-change="onBeforeSlideChange()" as-nav-for=".slider-for">
             <div ng-repeat="item in media track by $index">
                 <img ng-if="item.type === 'image'" class="image-responsive" data-lazy="{{image.thumbnail(item.file_name)}}" />
                 <img ng-if="item.type === 'video'" class="image-responsive" data-lazy="{{item.videoSettings.poster}}" />
@@ -12,7 +12,7 @@
         </slick>
         <div class="col-md-6 col-md-offset-3">
             <!--Slider For-->
-            <slick class="ng-slick slider-for" ng-if="dataLoaded" init-onload="false" data="dataLoaded" lazy-load="progressive" slides-to-show="1" slides-to-scroll="1" arrows="false" fade="true" on-before-change="onbeforeSlideChange()" as-nav-for=".slider-nav">
+            <slick class="ng-slick slider-for" ng-if="dataLoaded" init-onload="false" data="dataLoaded" lazy-load="progressive" slides-to-show="1" slides-to-scroll="1" arrows="false" fade="true" on-before-change="onBeforeSlideChange()" as-nav-for=".slider-nav">
                 <div ng-repeat="item in media track by $index">
                     <photos ng-if="item.type === 'image'" image-style="full"></photos>
                     <video-player ng-if="item.type === 'video'" video-settings="item.videoSettings"></video-player>
