@@ -17,7 +17,7 @@
                as-nav-for=".slider-for">
             <div ng-repeat="item in media track by $index">
                 <img ng-if="item.type === 'image'" class="image-responsive" data-lazy="{{image.thumbnail(item.file_name)}}" />
-                <img ng-if="item.type === 'video'" class="image-responsive" data-lazy="{{image.thumbnail(item.videoSettings.poster)}}" />
+                <img ng-if="item.type === 'video'" class="image-responsive" data-lazy="{{item.videoSettings.poster}}" />
             </div>
         </slick>
         <div class="col-md-6 col-md-offset-3">
