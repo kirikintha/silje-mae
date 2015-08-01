@@ -10,7 +10,7 @@ angular.module('MediaApp.directives')
             controller: function($scope) {
                 //Layout Specific Changes
                 if ($scope.layout === 'carousel') {
-                    $scope.onBeforeSlideChange = function() {
+                    $scope.$watch('beforeChange') = function(event, slick, currentSlide, nextSlide) {
                         console.debug('slide change');
                     };
                 }
