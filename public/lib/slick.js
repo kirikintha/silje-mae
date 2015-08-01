@@ -52,7 +52,6 @@ angular.module('slick', []).directive('slick', [
                 nextArrow: '@'
             },
             link: function(scope, element, attrs) {
-                console.debug(scope);
                 var destroySlick, initializeSlick, isInitialized;
                 destroySlick = function() {
                     return $timeout(function() {
