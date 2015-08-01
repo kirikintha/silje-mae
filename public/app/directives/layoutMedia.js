@@ -8,14 +8,16 @@ angular.module('MediaApp.directives')
                 return '/partials/media/layout.' + attr.type + '.html';
             },
             controller: function($scope) {
+                console.debug($(document));
                 //Layout Specific Changes
-                $('document')
-                    .on('beforeChange', '.ng-slick', function() {
-                        console.debug('before change');
-                    })
-                    .on('afterChange', '.ng-slick', function() {
-                        console.debug('after change');
-                    });
+            // $(document)
+            //     .on('beforeChange', '.ng-slick', function() {
+            //         console.debug('before change');
+            //     })
+            //     .on('afterChange', '.ng-slick', function() {
+            //         console.debug('after change');
+            //     });
+
             }
         };
     }]);
