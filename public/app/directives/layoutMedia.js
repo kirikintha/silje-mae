@@ -10,12 +10,9 @@ angular.module('MediaApp.directives')
             controller: function($scope) {
                 //If our layout is carousel, then attach the carousel before change event.
                 if ($scope.layout === 'carousel') {
-                    $timeout(function() {
-                        angular.element('.slider-nav, .slider-for')
-                            .on('beforeChange', function() {
-                                console.debug('I am before change.');
-                            });
-                    }, 0);
+                    $scope.onBeforeChange = function() {
+                        console.debug('I am on before cahnge.');
+                    }
                 }
             }
         };
