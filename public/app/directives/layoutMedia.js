@@ -9,7 +9,7 @@ angular.module('MediaApp.directives')
             },
             controller: function($scope) {
                 //Layout Specific Changes
-                angular.element('document')
+                $('document')
                     .on('beforeChange', '.ng-slick', function() {
                         console.debug('before change');
                     })
