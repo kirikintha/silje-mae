@@ -15,7 +15,7 @@ angular.module('MediaApp.directives')
                     $(document)
                         .on('beforeChange', '.ng-slick', function() {
                             //Broadcast video pause event.
-                            $scope.broadcast('videoPlayerPauseAll');
+                            $scope.$broadcast('videoPlayerPauseAll');
                         });
                 }
 
