@@ -1,6 +1,7 @@
-html{
+html {
     height: 100%;
 }
+
 body {
     min-height: 100%;
 }
@@ -71,6 +72,10 @@ div.loader {
     height: auto;
 }
 
+ul.nav li > ul > li {
+    background-color: #fff;
+}
+
 ul.nav li > ul {
     margin-left: 15px;
 }
@@ -80,7 +85,8 @@ ul.nav li > ul {
     min-height: 200px;
 }
 
-.slick-prev::before, .slick-next::before {
+.slick-prev::before,
+.slick-next::before {
     color: #98978b !important;
 }
 
@@ -89,15 +95,19 @@ ul.nav li > ul {
 }
 
 .slider-nav img {
-    -ms-transform: scale(0.85); /* IE 9 */
-    -webkit-transform: scale(0.85); /* Safari */
+    -ms-transform: scale(0.85);
+    /* IE 9 */
+    -webkit-transform: scale(0.85);
+    /* Safari */
     transform: scale(0.85);
 }
 
 .slider-nav .slick-center img {
     width: inherit;
-    -ms-transform: scale(1); /* IE 9 */
-    -webkit-transform: scale(1); /* Safari */
+    -ms-transform: scale(1);
+    /* IE 9 */
+    -webkit-transform: scale(1);
+    /* Safari */
     transform: scale(1);
 }
 
@@ -132,7 +142,7 @@ ul.nav li > ul {
     text-align: center;
     top: 0;
     left: 0;
-    background: rgba(0,0,0,0.8);
+    background: rgba(0, 0, 0, 0.8);
 }
 
 #lightbox img {
