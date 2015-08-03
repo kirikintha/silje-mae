@@ -17,7 +17,7 @@ class MainController extends Controller {
 				$assets[] = str_replace(public_path(), '', $file->getPathname());
 			}
 		}
-		View::share('assets', sort($assets));
+		View::share('assets', natsort($assets));
 		return View::make('main');
 	}
 
