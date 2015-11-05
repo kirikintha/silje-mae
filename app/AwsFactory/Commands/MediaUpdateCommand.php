@@ -303,7 +303,7 @@ class MediaUpdateCommand extends Command {
 		//Look for Rotation and rotate.
 		$this->rotate();
 		//Resize Video
-		$command = sprintf('ffmpeg -y -i %s -vf "scale=640:-1" -acodec copy -movflags faststart %s', $this->video['in'], $this->video['out']);
+		$command = sprintf('ffmpeg -y -i %s -vf "scale=640:-2" -acodec copy -movflags faststart %s', $this->video['in'], $this->video['out']);
 		//Scale video to mp4 and prep for streaming.
 		$this->exec($command);
 		//Put the video back up to S3.
@@ -346,7 +346,7 @@ class MediaUpdateCommand extends Command {
 	//Make a poster image for the video.
 	private function makePoster($file_name, $extension) {
 		$out     = $this->tmp . '/' . str_replace($extension, 'jpg', $file_name);
-		$command = sprintf('ffmpeg -ss 00:00:01 -i %s -vf "scale=640:-1" -vframes 1 %s', $this->video['in'], $out);
+		$command = sprintf('ffmpeg -ss 00:00:01 -i %s -vf "scale=640:-2" -vframes 1 %s', $this->video['in'], $out);
 		$this->exec($command);
 		$this->video['created'][] = $out;
 		$this->putPoster($out);
@@ -433,6 +433,7 @@ class MediaUpdateCommand extends Command {
 		$execResponse = json_encode($output);
 		if (preg_match('/error/i', $execResponse)) {
 			//Set Message
+			$this->info($command);
 			$this->error(sprintf("FFMPEG ERROR:\n %s", $execResponse));
 			exit();
 		}
