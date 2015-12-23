@@ -66,7 +66,7 @@ class MenuController extends Controller {
 		//Cache me.
 		$expires = Carbon::now()->addMinutes(1440);
 		//Sort menus.
-		natsort($this->menus);
+		ksort($this->menus, SORT_NATURAL);
 		foreach ($this->menus as $key => $menu) {
 			ksort($menu['children'], SORT_NATURAL);
 			$this->menus[$key]['children'] = $menu['children'];
