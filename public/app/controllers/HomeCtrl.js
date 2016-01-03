@@ -49,24 +49,26 @@ angular.module('MediaApp.controllers')
             var target = angular.element('<section class="stage"><figure class="ball bubble"></figure></section>');
             //Interval for adding.
             $interval(function() {
-                //Rnadomly place.
-                var x = _.random(10, 100);
-                var y = Math.round(_.random(0, 100));
-                var z = Math.round(_.random(0, 5));
-                var speed = Math.round(_.random(2, 7));
-                var bubble = target.clone();
-                var style = {
-                    width: x + 'px',
-                    height: x + 'px',
-                    left: y + '%',
-                    '-webkit-animation-delay': z + 's',
-                    'animation-delay': z + 's',
-                    '-webkit-animation-duration': speed + 's',
-                    'animation-duration': speed + 's'
-                };
-                bubble.css(style);
-                container.append(bubble);
-                added.push(bubble);
+                if (_.size(added) <= threshold) {
+                    //Rnadomly place.
+                    var x = _.random(10, 100);
+                    var y = Math.round(_.random(0, 100));
+                    var z = Math.round(_.random(0, 5));
+                    var speed = Math.round(_.random(2, 7));
+                    var bubble = target.clone();
+                    var style = {
+                        width: x + 'px',
+                        height: x + 'px',
+                        left: y + '%',
+                        '-webkit-animation-delay': z + 's',
+                        'animation-delay': z + 's',
+                        '-webkit-animation-duration': speed + 's',
+                        'animation-duration': speed + 's'
+                    };
+                    bubble.css(style);
+                    container.append(bubble);
+                    added.push(bubble);
+                }
                 //Pull a random item off the stack.
                 if (_.size(added) > threshold) {
                     var targets = _.sample(added, 3);
