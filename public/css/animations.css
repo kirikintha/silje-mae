@@ -10,44 +10,48 @@
 .view-animate.ng-enter {
     opacity: 0;
 }
+
 .view-animate.ng-enter.ng-enter-active {
     opacity: 1;
 }
+
 .view-animate.ng-leave {
     opacity: 1;
 }
+
 .view-animate.ng-leave.ng-leave-active {
     opacity: 0;
 }
+
 .view-animate.ng-move {
     opacity: 0.5;
 }
+
 .view-animate.ng-move.ng-move-active {
     opacity: 1;
 }
 
 .repeat-animate.ng-enter-stagger {
-    /* 200ms will be applied between each sucessive enter operation */ 
-    -webkit-transition-delay:0.2s;
-    transition-delay:0.2s;
-    -moz-animation-delay:0.2s;
-    -o-transition-delay:0.2s;
-
+    /* 200ms will be applied between each sucessive enter operation */
+    -webkit-transition-delay: 0.2s;
+    transition-delay: 0.2s;
+    -moz-animation-delay: 0.2s;
+    -o-transition-delay: 0.2s;
     /* this is here to avoid accidental CSS inheritance */
-    -webkit-transition-duration:0s;
-    transition-duration:0s;
-    -moz-transition-duration:0s;
-    -o-transition-duration:0s;
+    -webkit-transition-duration: 0s;
+    transition-duration: 0s;
+    -moz-transition-duration: 0s;
+    -o-transition-duration: 0s;
 }
 
 .repeat-animate.ng-enter-stagger,
 .repeat-animate.ng-leave-stagger,
 .repeat-animate.ng-move-stagger {
-    /* 200ms will be applied between each sucessive enter operation */ 
-    -webkit-transition-delay:0.2s;
-    transition-delay:0.2s;
-    -moz-animation-delay:0.2s;
-    -o-transition-delay:0.2s;
+    /* 200ms will be applied between each sucessive enter operation */
+    -webkit-transition-delay: 0.2s;
+    transition-delay: 0.2s;
+    -moz-animation-delay: 0.2s;
+    -o-transition-delay: 0.2s;
 }
 
 .repeat-animate.ng-enter,
@@ -62,18 +66,23 @@
 .repeat-animate.ng-enter {
     opacity: 0;
 }
+
 .repeat-animate.ng-enter.ng-enter-active {
     opacity: 1;
 }
+
 .repeat-animate.ng-leave {
     opacity: 1;
 }
+
 .repeat-animate.ng-leave.ng-leave-active {
     opacity: 0;
 }
+
 .repeat-animate.ng-move {
     opacity: 0.5;
 }
+
 .repeat-animate.ng-move.ng-move-active {
     opacity: 1;
 }
@@ -90,18 +99,249 @@
 #lightbox.ng-enter {
     opacity: 0;
 }
+
 #lightbox.ng-enter.ng-enter-active {
     opacity: 1;
 }
+
 #lightbox.ng-leave {
     opacity: 1;
 }
+
 #lightbox.ng-leave.ng-leave-active {
     opacity: 0;
 }
+
 #lightbox.ng-move {
     opacity: 0.5;
 }
+
 #lightbox.ng-move.ng-move-active {
     opacity: 1;
+}
+
+.ball {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
+    position: relative;
+    background: radial-gradient(circle at bottom, #81e8f6, #76deef 10%, #055194 80%, #062745 100%);
+}
+
+.ball:before {
+    content: "";
+    position: absolute;
+    top: 1%;
+    left: 5%;
+    width: 90%;
+    height: 90%;
+    border-radius: 100%;
+    background: radial-gradient(circle at top, white, rgba(255, 255, 255, 0) 58%);
+    -webkit-filter: blur(5px);
+    filter: blur(5px);
+    z-index: 2;
+}
+
+.ball:after {
+    content: "";
+    position: absolute;
+    display: none;
+    top: 5%;
+    left: 10%;
+    width: 80%;
+    height: 80%;
+    border-radius: 100%;
+    -webkit-filter: blur(1px);
+    filter: blur(1px);
+    z-index: 2;
+    -webkit-transform: rotateZ(-30deg);
+    transform: rotateZ(-30deg);
+}
+
+.ball .shadow {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.1) 40%, rgba(0, 0, 0, 0) 50%);
+    -webkit-transform: rotateX(90deg) translateZ(-160px);
+    transform: rotateX(90deg) translateZ(-160px);
+    z-index: 1;
+}
+
+.ball.plain {
+    background: black;
+}
+
+.ball.plain:before,
+.ball.plain:after {
+    display: none;
+}
+
+.ball.bubble {
+    background: radial-gradient(circle at 50% 55%, rgba(240, 245, 255, 0.9), rgba(240, 245, 255, 0.9) 40%, rgba(225, 238, 255, 0.8) 60%, rgba(43, 130, 255, 0.4));
+    -webkit-animation: bubble-anim 2s ease-out infinite;
+    animation: bubble-anim 2s ease-out infinite;
+}
+
+.ball.bubble:before {
+    -webkit-filter: blur(0);
+    filter: blur(0);
+    height: 80%;
+    width: 40%;
+    background: radial-gradient(circle at 130% 130%, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0) 46%, rgba(255, 255, 255, 0.8) 50%, rgba(255, 255, 255, 0.8) 58%, rgba(255, 255, 255, 0) 60%, rgba(255, 255, 255, 0) 100%);
+    -webkit-transform: translateX(131%) translateY(58%) rotateZ(168deg) rotateX(10deg);
+    transform: translateX(131%) translateY(58%) rotateZ(168deg) rotateX(10deg);
+}
+
+.ball.bubble:after {
+    display: block;
+    background: radial-gradient(circle at 50% 80%, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 74%, white 80%, white 84%, rgba(255, 255, 255, 0) 100%);
+}
+
+.stage {
+    width: 100px;
+    height: 100px;
+    display: inline-block;
+    margin: 20px;
+    -webkit-perspective: 1200px;
+    -moz-perspective: 1200px;
+    -ms-perspective: 1200px;
+    -o-perspective: 1200px;
+    perspective: 1200px;
+    -webkit-perspective-origin: 50% 50%;
+    -moz-perspective-origin: 50% 50%;
+    -ms-perspective-origin: 50% 50%;
+    -o-perspective-origin: 50% 50%;
+    perspective-origin: 50% 50%;
+    position: fixed;
+    bottom: -20%;
+    left: 0;
+    z-index: 1030;
+    -webkit-animation: bubble-up 5s ease-out infinite;
+    animation: bubble-up 5s ease-out infinite;
+}
+
+@-webkit-keyframes bubble-anim {
+    0% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+    20% {
+        -webkit-transform: scaleY(0.95) scaleX(1.05);
+        transform: scaleY(0.95) scaleX(1.05);
+    }
+    48% {
+        -webkit-transform: scaleY(1.1) scaleX(0.9);
+        transform: scaleY(1.1) scaleX(0.9);
+    }
+    68% {
+        -webkit-transform: scaleY(0.98) scaleX(1.02);
+        transform: scaleY(0.98) scaleX(1.02);
+    }
+    80% {
+        -webkit-transform: scaleY(1.02) scaleX(0.98);
+        transform: scaleY(1.02) scaleX(0.98);
+    }
+    97%,
+    100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+}
+
+@keyframes bubble-anim {
+    0% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+    20% {
+        -webkit-transform: scaleY(0.95) scaleX(1.05);
+        transform: scaleY(0.95) scaleX(1.05);
+    }
+    48% {
+        -webkit-transform: scaleY(1.1) scaleX(0.9);
+        transform: scaleY(1.1) scaleX(0.9);
+    }
+    68% {
+        -webkit-transform: scaleY(0.98) scaleX(1.02);
+        transform: scaleY(0.98) scaleX(1.02);
+    }
+    80% {
+        -webkit-transform: scaleY(1.02) scaleX(0.98);
+        transform: scaleY(1.02) scaleX(0.98);
+    }
+    97%,
+    100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+}
+
+@-webkit-keyframes bubble-up {
+    0% {
+        bottom: -20%;
+        -webkit-transform: scale(.8);
+        opacity: 0;
+    }
+    20% {
+        bottom: 20%;
+        -webkit-transform: scale(.6);
+        opacity: .8;
+    }
+    48% {
+        bottom: 58%;
+        -webkit-transform: scale(.6);
+        opacity: .8;
+    }
+    68% {
+        bottom: 88%;
+        -webkit-transform: scale(.6);
+        opacity: .8;
+    }
+    80% {
+        bottom: 98%;
+        -webkit-transform: scale(.6);
+        opacity: .8;
+    }
+    97%,
+    100% {
+        bottom: 110%;
+        -webkit-transform: scale(.8);
+        opacity: 0;
+    }
+}
+
+@keyframes bubble-up {
+    0% {
+        bottom: -20%;
+        transform: scale(.8);
+        opacity: 0;
+    }
+    20% {
+        bottom: 20%;
+        transform: scale(.6);
+        opacity: .8;
+    }
+    48% {
+        bottom: 58%;
+        transform: scale(.6);
+        opacity: .8;
+    }
+    68% {
+        bottom: 88%;
+        transform: scale(.6);
+        opacity: .8;
+    }
+    80% {
+        bottom: 98%;
+        transform: scale(.6);
+        opacity: .8;
+    }
+    97%,
+    100% {
+        bottom: 110%;
+        transform: scale(.8);
+        opacity: 0;
+    }
 }
