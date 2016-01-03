@@ -1,8 +1,11 @@
 <div class="photos {{layout}}">
     <div class="view col-sm-12">
-        <div class="row">        
-            <div class="col-md-9">
+        <div class="row">
+            <div class="col-md-6">
                 <breadcrumbs></breadcrumbs>
+            </div>
+            <div class="col-md-3">
+                <media-controls></media-controls>
             </div>
             <div ng-if="detect.isMobile === false" class="col-md-3 clearfix">
                 <layout-controls></layout-controls>

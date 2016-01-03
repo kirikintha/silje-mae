@@ -1,6 +1,8 @@
-<ul class="dropdown-menu" role="menu" dx-start-with="menus">
-    <li ng-class="{'active' : node.path == path}" ng-repeat="node in $dxPrior">
-        <a ng-href="{{link(node.path)}}">{{node.name}}</a>
-        <ul class="nav" dx-connect="node.children"/>
-    </li>
-</ul>
+<li class="dropdown" ng-repeat="menu in menus" ng-class="checkNavActive(menu.path)">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{menu.name}} <span class="caret"></span></a>
+    <ul class="dropdown-menu" role="menu" dx-start-with="menu.children">
+        <li ng-class="{'active' : node.path == path}" ng-repeat="node in $dxPrior">
+            <a ng-href="{{link(node.path)}}">{{node.name}}</a>
+        </li>
+    </ul>
+</li>

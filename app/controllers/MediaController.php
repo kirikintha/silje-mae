@@ -88,10 +88,11 @@ class MediaController extends Controller {
 				if ($media['type'] === 'video') {
 					$base                   = pathinfo($file_name, PATHINFO_FILENAME);
 					$media['videoSettings'] = array(
-						'id'     => sprintf('video-%s', $base),
-						'poster' => sprintf('%s/%s/posters/%s.jpg', $this->url, $this->bucket, $base),
-						'mp4'    => sprintf('%s/%s/videos/%s.mp4', $this->url, $this->bucket, $base),
-						'flv'    => sprintf('%s/%s/videos/%s.flv', $this->url, $this->bucket, $base),
+						'id'      => sprintf('video-%s', $base),
+						'poster'  => sprintf('%s/%s/posters/%s.jpg', $this->url, $this->bucket, $base),
+						'mp4'     => sprintf('%s/%s/videos/%s.mp4', $this->url, $this->bucket, $base),
+						'flv'     => sprintf('%s/%s/videos/%s.flv', $this->url, $this->bucket, $base),
+						'classes' => 'thumbnail',
 					);
 				}
 				array_set($this->media, ltrim($notated, '.'), $media);

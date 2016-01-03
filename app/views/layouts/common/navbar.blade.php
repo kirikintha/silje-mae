@@ -11,10 +11,7 @@
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="dropdown" ng-class="checkNavActive('media')">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Media <span class="caret"></span></a>
-                    <menu-media></menu-media>
-                </li>
+                <menu-media></menu-media>
             </ul>
         </div><!--/.nav-collapse -->
     </div>

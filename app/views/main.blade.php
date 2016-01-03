@@ -2,7 +2,7 @@
 
 @section('styles')
 
-<link href="/css/sandstone.bootstrap.min.css" rel="stylesheet">
+<link href="/css/paper.bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"> <!-- load fontawesome -->
 <link href="//vjs.zencdn.net/4.12/video-js.css" rel="stylesheet">
 <link href="/css/video-styles.css" rel="stylesheet">

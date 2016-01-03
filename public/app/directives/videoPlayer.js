@@ -15,8 +15,10 @@ angular.module('MediaApp.directives')
                     scope.poster = video_settings.poster;
                     scope.mp4 = video_settings.mp4;
                     scope.flv = video_settings.flv;
+                    scope.classes = _.isUndefined(video_settings.classes) ? '' : video_settings.classes;
                     //Gather the settings.
                     var player_settings = {
+                        loop: _.isUndefined(video_settings.loop) ? false : true,
                         example_option: true,
                         width: "auto",
                         height: "auto",
@@ -25,6 +27,9 @@ angular.module('MediaApp.directives')
                     $timeout(function() {
                         var player = videojs(video_settings.id, player_settings);
                         videoPlayers.push(player);
+                        if (!_.isUndefined(video_settings.autoplay)) {
+                            player.play();
+                        }
                     }, 0);
                 }
             },
