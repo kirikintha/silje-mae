@@ -1,5 +1,5 @@
 <div id="layout-controls" class="btn-group pull-right" role="group">
     <a ng-href="media/{{path}}?layout={{layout}}&mediaType=image" class="btn btn btn-default" ng-class="{'active' : mediaType == 'image'}"> Images <span class="glyphicon glyphicon-picture"></span></a>
     <a ng-href="media/{{path}}?layout={{layout}}&mediaType=video" class="btn btn btn-default" ng-class="{'active' : mediaType == 'video'}"> Videos <span class="glyphicon glyphicon-film"></span></a>
-    <a ng-href="media/{{path}}?layout={{layout}}" class="btn btn btn-default" ng-class="{'active' : mediaType === null}"> All</a>
+    <a ng-href="media/{{path}}?layout={{layout}}" class="btn btn btn-default" ng-class="{'active' : mediaType !== 'image' || mediaType !== 'video'}"> All</a>
 </div>
