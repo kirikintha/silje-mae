@@ -214,6 +214,7 @@
     -ms-perspective-origin: 50% 50%;
     -o-perspective-origin: 50% 50%;
     perspective-origin: 50% 50%;
+    opacity: 0;
     position: fixed;
     bottom: -20%;
     left: 0;
@@ -287,27 +288,27 @@
     20% {
         bottom: 20%;
         -webkit-transform: scale(.6);
-        opacity: .8;
+        opacity: .7;
     }
     48% {
-        bottom: 58%;
+        bottom: 68%;
         -webkit-transform: scale(.6);
-        opacity: .8;
+        opacity: .7;
     }
     68% {
-        bottom: 88%;
-        -webkit-transform: scale(.6);
-        opacity: .8;
-    }
-    80% {
         bottom: 98%;
         -webkit-transform: scale(.6);
-        opacity: .8;
+        opacity: .7;
+    }
+    80% {
+        bottom: 108%;
+        -webkit-transform: scale(.6);
+        opacity: .7;
     }
     97%,
     100% {
-        bottom: 110%;
-        -webkit-transform: scale(.8);
+        bottom: 118%;
+        transform: scale(.8);
         opacity: 0;
     }
 }
@@ -321,26 +322,26 @@
     20% {
         bottom: 20%;
         transform: scale(.6);
-        opacity: .8;
+        opacity: .7;
     }
     48% {
-        bottom: 58%;
+        bottom: 68%;
         transform: scale(.6);
-        opacity: .8;
+        opacity: .7;
     }
     68% {
-        bottom: 88%;
-        transform: scale(.6);
-        opacity: .8;
-    }
-    80% {
         bottom: 98%;
         transform: scale(.6);
-        opacity: .8;
+        opacity: .7;
+    }
+    80% {
+        bottom: 108%;
+        transform: scale(.6);
+        opacity: .7;
     }
     97%,
     100% {
-        bottom: 110%;
+        bottom: 118%;
         transform: scale(.8);
         opacity: 0;
     }

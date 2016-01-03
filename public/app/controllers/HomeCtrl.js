@@ -43,37 +43,38 @@ angular.module('MediaApp.controllers')
         }, 600);
 
         function bubbles() {
-            var threshold = 10;
-            var added = [];
+            var threshold = 12;
             var container = angular.element('.home');
             var target = angular.element('<section class="stage"><figure class="ball bubble"></figure></section>');
             //Interval for adding.
             $interval(function() {
-                if (_.size(added) <= threshold) {
-                    //Rnadomly place.
-                    var x = _.random(10, 100);
-                    var y = Math.round(_.random(0, 100));
-                    var z = Math.round(_.random(0, 5));
-                    var speed = Math.round(_.random(2, 7));
+                var current = angular.element('.stage');
+                if (_.size(current) <= threshold) {
+                    //Randomly place.
+                    var x = _.random(10, 170);
+                    var left = Math.round(_.random(0, 100));
+                    var delay = Math.round(_.random(0, 5));
+                    var speed = Math.round(_.random(3, 7));
                     var bubble = target.clone();
+                    var z = Math.round(_.random(1020, 1040));
                     var style = {
                         width: x + 'px',
                         height: x + 'px',
-                        left: y + '%',
-                        '-webkit-animation-delay': z + 's',
-                        'animation-delay': z + 's',
+                        left: left + '%',
+                        zIndex: z,
+                        '-webkit-animation-delay': delay + 's',
+                        'animation-delay': delay + 's',
                         '-webkit-animation-duration': speed + 's',
-                        'animation-duration': speed + 's'
+                        'animation-duration': speed + 's',
                     };
                     bubble.css(style);
                     container.append(bubble);
-                    added.push(bubble);
-                }
-                //Pull a random item off the stack.
-                if (_.size(added) > threshold) {
-                    var targets = _.sample(added, 3);
-                    _.each(targets, function(target) {
-                        target.remove();
+                } else {
+                    var elements = _.sample(current, 3);
+                    _.each(elements, function(element) {
+                        $timeout(function() {
+                            element.remove();
+                        }, 100);
                     });
                 }
             }, 1000);
