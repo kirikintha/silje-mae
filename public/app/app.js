@@ -14,47 +14,48 @@ angular.module('MediaApp', [
 
 //Route Configuration.
 angular.module('MediaApp')
-        .config(['$routeProvider', '$locationProvider', '$sceDelegateProvider',
-            function ($routeProvider, $locationProvider, $sceDelegateProvider) {
-                //Photo config.
-                var mediaConfig = {
-                    templateUrl: '/partials/media.html',
-                    controller: 'MediaCtrl',
-                    controllerAs: 'media',
+    .config(['$routeProvider', '$locationProvider', '$sceDelegateProvider',
+        function($routeProvider, $locationProvider, $sceDelegateProvider) {
+            //Photo config.
+            var mediaConfig = {
+                templateUrl: '/partials/media.html',
+                controller: 'MediaCtrl',
+                controllerAs: 'media',
+                resolve: {
+                    detect: function(Detect) {
+                        return Detect.fetch();
+                    }
+                }
+            };
+            //Routes.
+            $routeProvider
+                .when('/home', {
+                    templateUrl: '/partials/home.html',
+                    controller: 'HomeCtrl',
+                    controllerAs: 'home',
                     resolve: {
-                        detect: function (Detect) {
+                        detect: function(Detect) {
                             return Detect.fetch();
                         }
                     }
-                };
-                //Routes.
-                $routeProvider
-                        .when('/home', {
-                            templateUrl: '/partials/home.html',
-                            controller: 'HomeCtrl',
-                            controllerAs: 'home',
-                            resolve: {
-                                detect: function (Detect) {
-                                    return Detect.fetch();
-                                }
-                            }
-                        })
-                        .when('/media', mediaConfig)
-                        .when('/media/:path*', mediaConfig)
-                        .otherwise({
-                            redirectTo: '/home'
-                        });
-                //Set HTML 5 mode.
-                $locationProvider.html5Mode(true);
-                //Delegate S3 as a trusted source.
-                $sceDelegateProvider.resourceUrlWhitelist([
-                    // Allow same origin resource loads.
-                    'self',
-                    // Allow loading from our assets domain.  Notice the difference between * and **.
-                    'http://s3.amazonaws.com/silje-mae/**',
-                    'https://s3.amazonaws.com/silje-mae/**'
-                ]);
-            }]);
+                })
+                .when('/media', mediaConfig)
+                .when('/media/:path*', mediaConfig)
+                .otherwise({
+                    redirectTo: '/home'
+                });
+            //Set HTML 5 mode.
+            $locationProvider.html5Mode(true);
+            //Delegate S3 as a trusted source.
+            $sceDelegateProvider.resourceUrlWhitelist([
+                // Allow same origin resource loads.
+                'self',
+                // Allow loading from our assets domain.  Notice the difference between * and **.
+                'http://s3.amazonaws.com/silje-mae/**',
+                'https://s3.amazonaws.com/silje-mae/**'
+            ]);
+        }
+    ]);
 
 
 //Modules

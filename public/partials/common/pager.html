@@ -7,7 +7,7 @@
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
-            <li class="" ng-class="{'active' : page.current == page.name}" ng-repeat="page in pages track by $index"><a href="{{page.url}}">{{page.name}}</a></li>
+            <li class="" ng-class="{'active' : page.current == page.name}" ng-repeat="page in pages track by $index"><a ng-href="{{page.url}}">{{page.name}}</a></li>
             <li>
                 <a href="#" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>

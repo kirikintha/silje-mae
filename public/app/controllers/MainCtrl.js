@@ -13,9 +13,6 @@
 angular.module('MediaApp.controllers')
     .controller('MainCtrl', ['$scope', '$http', '$route', '$routeParams', '$location', '_',
         function($scope, $http, $route, $routeParams, $location, _) {
-            var layout = $location.search().layout;
-            //Set layout.
-            $scope.layout = _.isUndefined(layout) ? 'tile' : layout;
             //Animate a view, if we are on the home page.
             //@TODO - would love to be able to make this a param on a page.
             $scope.viewAnimate = function() {
@@ -40,9 +37,5 @@ angular.module('MediaApp.controllers')
                 .success(function(data) {
                     $scope.menus = data;
                 });
-            //Testing.
-            $scope.link = function(path) {
-                return 'media/' + path + '?layout=' + $scope.layout;
-            };
         }
     ]);

@@ -41,7 +41,7 @@ angular.module('MediaApp.controllers')
     ])
     .filter('mediaFilter', ['_', function(_) {
         return function(media, mediaType) {
-            if (!_.isNull(mediaType)) {
+            if (mediaType === 'image' || mediaType === 'video') {
                 return _.where(media, {
                     type: mediaType
                 });

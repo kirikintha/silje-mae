@@ -2,7 +2,7 @@
     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{menu.name}} <span class="caret"></span></a>
     <ul class="dropdown-menu" role="menu" dx-start-with="menu.children">
         <li ng-class="{'active' : node.path == path}" ng-repeat="node in $dxPrior">
-            <a ng-href="{{link(node.path)}}">{{node.name}}</a>
+            <nav-link path="node.path" name="node.name"></nav-link>
         </li>
     </ul>
 </li>
