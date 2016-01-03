@@ -72,9 +72,16 @@ angular.module('MediaApp.controllers')
                 } else {
                     var elements = _.sample(current, 3);
                     _.each(elements, function(element) {
+                        var item = angular.element(element);
+                        item.css({
+                            '-webkit-animation': 'bubble-pop 1.4s ease-out infinite',
+                            'animation': 'bubble-pop 1.4s ease-out infinite',
+                            '-webkit-animation-delay': '0s',
+                            'animation-delay': '0s',
+                        });
                         $timeout(function() {
-                            element.remove();
-                        }, 100);
+                            item.remove();
+                        }, 2000);
                     });
                 }
             }, 1000);
