@@ -46,8 +46,8 @@ class MediaUpdateCommand extends Command {
 
 	public function __construct(AwsS3ClientInterface $s3) {
 		parent::__construct();
-		//Set ini for 256MB
-		ini_set('memory_limit', '256M');
+		//Set ini for 512MB
+		ini_set('memory_limit', '1024M');
 		//Set vars
 		$this->s3 = $s3;
 		//@TODO - let's move this back into the client.
@@ -303,7 +303,7 @@ class MediaUpdateCommand extends Command {
 		//Look for Rotation and rotate.
 		$this->rotate();
 		//Resize Video
-		$command = sprintf('ffmpeg -y -i %s -vf "scale=640:-2" -acodec copy -movflags faststart %s', $this->video['in'], $this->video['out']);
+		$command = sprintf('ffmpeg -y -i %s -vf "scale=640:-2" -acodec aac -movflags faststart %s', $this->video['in'], $this->video['out']);
 		//Scale video to mp4 and prep for streaming.
 		$this->exec($command);
 		//Put the video back up to S3.

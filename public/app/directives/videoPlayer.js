@@ -26,6 +26,17 @@ angular.module('MediaApp.directives')
                     };
                     $timeout(function() {
                         var player = videojs(video_settings.id, player_settings);
+                        player.on('play', function(el) {
+                            var id = this.id();
+                            _.each(videoPlayers, function(player) {
+                                if (!player.paused()) {
+                                    //If the id is not this player, pause it.
+                                    if (player.id() !== id) {
+                                        player.pause();
+                                    }
+                                }
+                            });
+                        });
                         videoPlayers.push(player);
                         if (!_.isUndefined(video_settings.autoplay)) {
                             player.play();
