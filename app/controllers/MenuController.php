@@ -48,6 +48,7 @@ class MenuController extends Controller {
 			'region'     => \Aws\Common\Enum\Region::US_EAST_1,
 			'bucket'     => $this->bucket,
 			'prefix'     => $this->prefix,
+			'delimeter'  => '/',
 		);
 		$this->s3->testConnection();
 		if ($this->s3->response['connected'] === true) {
@@ -57,8 +58,11 @@ class MenuController extends Controller {
 				$object = $this->s3->objects->current();
 				$this->s3->objects->next();
 				if (!empty($object)) {
-					//Look for a menu item.
-					$this->setMenuItem($object['Key']);
+					//If the size is zero, we can look at the item.
+					if ((int) $object['Size'] === 0) {
+						//Look for a menu item.
+						$this->setMenuItem($object['Key']);
+					}
 				}
 				unset($object);
 			}
@@ -76,7 +80,7 @@ class MenuController extends Controller {
 
 	//Set Menu Item.
 	private function setMenuItem($key = null) {
-		if (!preg_match('/\.(jpg|jpeg|bpm|mov|png|gif|mp4)$/i', $key)) {
+		if (!preg_match('/\.(jpg|jpeg|bpm|mov|png|gif|mp4|m4v)$/i', $key)) {
 			$key     = str_replace($this->prefix, '', $key);
 			$notated = str_replace('/', '.children.', rtrim(ltrim($key, '/'), '/'));
 			if (!empty($notated)) {
