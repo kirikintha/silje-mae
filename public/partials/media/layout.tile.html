@@ -4,7 +4,7 @@
     <!--Photos-->
     <div ng-repeat="item in media track by $index" class="col-md-4 repeat-animate tile">
         <photos ng-if="item.type === 'image'" image-style="full"></photos>
-        <video-player ng-if="item.type === 'video'" video-settings="item.videoSettings"></video-player>
+        <photos ng-if="item.type === 'video'" image-style="full"></photos>
     </div>
     <!--Pager-->
     <pager></pager>

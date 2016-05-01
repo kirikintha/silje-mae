@@ -1,1 +1,23 @@
-<div id="lightbox" class="fade hidden" ng-click="lightbox.close()"></div>
+<div id="lightbox" class="fade hidden">
+    <div class="controls close">
+        <span>{{lightbox.current + 1}} of {{media.length}}&nbsp;</span>
+        <a title="close" alt="close" ng-click="lightbox.close()" role="button" aria-label="Previous">
+            <i class="fa fa-times-circle">&nbsp;</i>
+        </a>
+    </div>
+    <div ng-show="lightbox.current > 0" class="controls previous">
+        <a title="previous" alt="previous" ng-click="lightbox.previous()" role="button" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+        </a>
+    </div>
+    <div ng-show="lightbox.current + 1 < media.length" class="controls next">
+        <a title="next" alt="next" ng-click="lightbox.next()" role="button" aria-label="Previous">
+            <span aria-hidden="true">&raquo;</span>
+        </a>
+    </div>
+    <div class="fa fa-refresh fa-spin" ng-class="{'hidden' : lightbox.item.type}"> </div>
+    <!-- Image -->
+    <img ng-if="lightbox.item.type === 'image'" class="media" ng-src="{{image.full(lightbox.item.file_name)}}" />
+    <!-- Video -->
+    <video-player ng-if="lightbox.item.type === 'video'" class="media media-video" video-settings="lightbox.item.videoSettings"></video-player>
+</div>

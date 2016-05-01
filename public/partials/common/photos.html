@@ -1,7 +1,11 @@
-<div  class="thumbnail">
+<div class="thumbnail">
     <a ng-if="item.title !== undefined" ng-href="{{link(item.path)}}">
         <h5>{{item.title}}</h5>
-        <img class="img-responsive" ng-src="{{image.thumbnail(item.file_name)}}" />
+        <img ng-if="item.type === 'image'" class="img-responsive" ng-src="{{image.thumbnail(item.file_name)}}" />
+        <img ng-if="item.type === 'video'" class="img-responsive" ng-src="{{item.videoSettings.poster}}" />
     </a>
-    <a ng-if="item.title == undefined" ng-click="lightbox.open(image.full(item.file_name))"><img class="img-responsive" ng-src="{{image.thumbnail(item.file_name)}}" /></a>
+    <a ng-if="item.title === undefined" ng-click="lightbox.open(item, $index)">
+        <img ng-if="item.type === 'image'" class="img-responsive" ng-src="{{image.thumbnail(item.file_name)}}" />
+        <img ng-if="item.type === 'video'" class="img-responsive" ng-src="{{item.videoSettings.poster}}" />
+    </a>
 </div>

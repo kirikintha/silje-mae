@@ -111,14 +111,51 @@ ul.nav li > ul {
     background: rgba(0, 0, 0, 0.8);
 }
 
-#lightbox img {
-    height: 75%;
+#lightbox .fa {
+    color: #fff;
+    position: relative;
+    top: 50%;
+}
+
+#lightbox img.media {
+    height: 83%;
     width: auto;
-    margin-top: 8%;
+    margin-top: 6.5%;
+}
+
+#lightbox .media-video {
+    width: 75%;
+    margin: auto;
+    margin-top: 5.35%;
 }
 
 #lightbox:target {
     outline: none;
+}
+
+#lightbox .controls {
+    color: #fff;
+    position: absolute;
+    top: 50%;
+    font-size: 3em;
+    margin: 15px;
+}
+
+#lightbox .controls.next {
+    right: 0;
+}
+
+#lightbox .controls.close {
+    font-size: 1em;
+    right: 0;
+    top: 55px;
+    margin: 10px;
+}
+
+#lightbox .controls a,
+#lightbox .controls button {
+    color: #fff;
+    text-decoration: none;
 }
 
 .pagination-status {

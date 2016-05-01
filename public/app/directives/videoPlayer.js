@@ -15,7 +15,7 @@ angular.module('MediaApp.directives')
                     scope.poster = video_settings.poster;
                     scope.mp4 = video_settings.mp4;
                     scope.flv = video_settings.flv;
-                    scope.classes = _.isUndefined(video_settings.classes) ? '' : video_settings.classes;
+                    // scope.classes = _.isUndefined(video_settings.classes) ? '' : video_settings.classes;
                     //Gather the settings.
                     var player_settings = {
                         loop: _.isUndefined(video_settings.loop) ? false : true,
@@ -51,6 +51,9 @@ angular.module('MediaApp.directives')
                 });
                 $scope.$on('videoPlayerPauseAll', function() {
                     pauseAll();
+                });
+                $scope.$on('videoPlayerDisposeAll', function() {
+                    disposeAll();
                 });
                 //Destroy all video players.
                 function disposeAll() {

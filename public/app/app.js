@@ -8,6 +8,8 @@
 angular.module('MediaApp', [
     //Angular Modules.
     'ngRoute', 'ngAnimate', 'ngLodash', 'dotjem.angular.tree', 'slick',
+    //System
+    'MediaApp.constants',
     //Photo App modules.
     'MediaApp.services', 'MediaApp.filters', 'MediaApp.directives', 'MediaApp.controllers'
 ]);
@@ -59,6 +61,7 @@ angular.module('MediaApp')
 
 
 //Modules
+angular.module('MediaApp.constants', []);
 angular.module('MediaApp.services', []);
 angular.module('MediaApp.filters', []);
 angular.module('MediaApp.directives', []);

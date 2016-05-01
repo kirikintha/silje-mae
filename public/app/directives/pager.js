@@ -39,6 +39,16 @@ angular.module('MediaApp.directives')
                             });
                         }
                         $scope.pages = pages;
+                        if (!_.isEmpty(pages)) {
+                            //Set previous and next
+                            if ($scope.pager.current > 1) {
+                                var previous = $scope.pager.current - 2;
+                                $scope.pager.previous = $scope.pages[previous]['url'];
+                            }
+                            if ($scope.pager.current < $scope.totalPages) {
+                                $scope.pager.next = $scope.pages[$scope.pager.current]['url'];
+                            }
+                        }
                     }
                 });
             }

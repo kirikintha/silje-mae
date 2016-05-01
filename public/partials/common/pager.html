@@ -3,13 +3,13 @@
         <span class="pagination-status text-uppercase">showing page {{current}} of {{totalPages}} ({{total}} Total)</span>
         <ul class="pagination">
             <li>
-                <a href="#" aria-label="Previous">
+                <a ng-href="{{pager.previous}}" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
             <li class="" ng-class="{'active' : page.current == page.name}" ng-repeat="page in pages track by $index"><a ng-href="{{page.url}}">{{page.name}}</a></li>
             <li>
-                <a href="#" aria-label="Next">
+                <a ng-href="{{pager.next}}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
