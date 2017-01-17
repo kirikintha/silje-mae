@@ -26,7 +26,7 @@ angular.module('MediaApp.controllers')
         //Player element.
         $scope.player = {
             threshold: 0,
-            score: 0,
+            score: 1000,
             timer: {},
             opened: false,
             active: false,
@@ -46,22 +46,22 @@ angular.module('MediaApp.controllers')
             level_message: 'Paused',
             levels: [
                 {
-                    message: 'Level 1!',
+                    message: 'Level 1',
                     delay: [1, 5],
                     speed: [4, 10]
                 },
                 {
-                    message: 'Level 2!',
+                    message: 'Level 2',
                     delay: [1, 4],
                     speed: [3, 8]
                 },
                 {
-                    message: 'Level 3!',
+                    message: 'Level 3',
                     delay: [1, 4],
                     speed: [2, 7]
                 },
                 {
-                    message: 'Level 4!',
+                    message: 'Level 4',
                     delay: [1, 4],
                     speed: [1, 5]
                 }
@@ -255,8 +255,12 @@ angular.module('MediaApp.controllers')
             } else if ($scope.player.score >= 750 && $scope.player.score < 1000) {
                 $scope.player.current_level = 3;
             }
-            //Show the level up overlay, if we change ot a higher level.
-            if (current_level < $scope.player.current_level) {
+            //Check to see if we are finishing or not.
+            if ($scope.player.score >= 1000) {
+                //If we are over 1000, finish the game!
+                $scope.player.finish();
+            } else if (current_level < $scope.player.current_level) {
+                //Show the level up overlay, if we change ot a higher level.
                 $scope.player.level_message = $scope.player.levels[$scope.player.current_level].message;
                 showGameLevel();
             }
@@ -275,9 +279,10 @@ angular.module('MediaApp.controllers')
             $timeout(function () {
                 container.fadeOut('fast', function () {
                     container.addClass('hide');
-                    if (reset = true) {
+                    if (reset === true) {
                         $scope.player.current_level = 0;
                         $scope.player.score = 0;
+                        $scope.player.threshold = 0;
                     }
                 });
             }, 2500);
