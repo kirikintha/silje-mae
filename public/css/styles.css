@@ -199,7 +199,7 @@ ul.nav li > ul {
 
 .shark {
     position: fixed;
-    bottom: 0px;
+    bottom: 3px;
     right: 0px;
     width: 128px;
     height: 128px;
@@ -248,6 +248,39 @@ ul.nav li > ul {
     z-index: 1030;
 }
 
+.star {
+    position: fixed;
+    bottom: -130px;
+    right: 16%;
+    width: 128px;
+    height: 128px;
+    z-index: 1031;
+}
+
+.star.opened,
+.star.bounce,
+.star.bounceInUp,
+.star.bounceOutDown {
+    bottom: -6px;
+}
+
+.star img {
+    width: 128px;
+    height: 128px;
+}
+
+.star span {
+    position: absolute;
+    width: 128px;
+    height: 128px;
+    font-size: 2.9em;
+    color: #C4A000;
+    font-weight: bold;
+    text-align: center;
+    line-height: 3.4em;
+    opacity: 0.85;
+}
+
 .video-home-page {
     position: absolute;
     top: 62px;
@@ -256,4 +289,57 @@ ul.nav li > ul {
     height: 100%;
     display: block;
     overflow: hidden;
+}
+
+.player-start {
+    position: fixed;
+    bottom: -10px;
+    right: 6%;
+    width: 128px;
+    height: 68px;
+    z-index: 1029;
+    border-radius: 6px;
+    border: 3px solid #35BF1B;
+    background-color: #40E521;
+    color: #DEFF18;
+    margin: 0px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 28px;
+    background-image: -webkit-linear-gradient(top, #47FF24, #15E836);
+    background-image: -moz-linear-gradient(top, #47FF24, #15E836);
+    background-image: -ms-linear-gradient(top, #47FF24, #15E836);
+    background-image: -o-linear-gradient(top, #47FF24, #15E836);
+    background-image: linear-gradient(to bottom, #47FF24, #15E836);
+}
+
+.game-level {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1040;
+    width: 100%;
+    height: 116%;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.game-level p {
+    font-family: 'Bungee Shade', cursive;
+    font-weight: bold;
+    font-size: 10em;
+    color: #FFF923;
+    position: relative;
+    top: 32%;
+    text-align: center;
+    width: 100%;
+    display: block;
+    text-transform: uppercase;
+    vertical-align: middle;
+    text-shadow:
+   -2px -2px 0 #B2101C,  
+    2px -2px 0 #B2101C,
+    -2px 2px 0 #B2101C,
+     2px 2px 0 #B2101C;
+    letter-spacing: 1px;
+    opacity: 0.9;
 }

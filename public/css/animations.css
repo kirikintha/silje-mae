@@ -221,6 +221,27 @@
     z-index: 1030;
     -webkit-animation: bubble-up 5s ease-out infinite;
     animation: bubble-up 5s ease-out infinite;
+    cursor: crosshair;
+}
+
+figure.unicorn {
+    background: transparent url('/images/unicorn.png') center center no-repeat;
+    background-size: cover;
+}
+
+figure.walrus {
+    background: transparent url('/images/walrus.png') center center no-repeat;
+    background-size: contain;
+}
+
+figure.yak {
+    background: transparent url('/images/yak.png') center center no-repeat;
+    background-size: cover;
+}
+
+figure.lion {
+    background: transparent url('/images/lion.png') center center no-repeat;
+    background-size: cover;
 }
 
 @-webkit-keyframes bubble-anim {
@@ -288,22 +309,22 @@
     20% {
         bottom: 20%;
         -webkit-transform: scale(.6);
-        opacity: .7;
+        opacity: .9;
     }
     48% {
         bottom: 68%;
         -webkit-transform: scale(.6);
-        opacity: .7;
+        opacity: .9;
     }
     68% {
         bottom: 98%;
         -webkit-transform: scale(.6);
-        opacity: .7;
+        opacity: .9;
     }
     80% {
         bottom: 108%;
         -webkit-transform: scale(.6);
-        opacity: .7;
+        opacity: .9;
     }
     97%,
     100% {
@@ -322,22 +343,22 @@
     20% {
         bottom: 20%;
         transform: scale(.6);
-        opacity: .7;
+        opacity: .9;
     }
     48% {
         bottom: 68%;
         transform: scale(.6);
-        opacity: .7;
+        opacity: .9;
     }
     68% {
         bottom: 98%;
         transform: scale(.6);
-        opacity: .7;
+        opacity: .9;
     }
     80% {
         bottom: 108%;
         transform: scale(.6);
-        opacity: .7;
+        opacity: .9;
     }
     97%,
     100% {

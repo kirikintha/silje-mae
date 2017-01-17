@@ -1,4 +1,4 @@
-module.exports = function (grunt) {
+module.exports = function(grunt) {
 
     /** 
      * Load required Grunt tasks. These are installed based on the versions listed
@@ -36,11 +36,10 @@ module.exports = function (grunt) {
          * pairs are evaluated based on this very configuration object.
          */
         meta: {
-            banner:
-                    '/**\n' +
-                    ' * <%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
-                    ' * <%= pkg.homepage %>\n' +
-                    ' */\n'
+            banner: '/**\n' +
+                ' * <%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>\n' +
+                ' * <%= pkg.homepage %>\n' +
+                ' */\n'
         },
         /**
          * The directories to delete when `grunt clean` is executed.
@@ -56,26 +55,22 @@ module.exports = function (grunt) {
          */
         copy: {
             build_vendor_js: {
-                files: [
-                    {
-                        src: ['<%= vendor_files.js %>'],
-                        dest: '<%= js_build_dir %>/',
-                        cwd: '.',
-                        expand: true,
-                        flatten: true
-                    }
-                ]
+                files: [{
+                    src: ['<%= vendor_files.js %>'],
+                    dest: '<%= js_build_dir %>/',
+                    cwd: '.',
+                    expand: true,
+                    flatten: true
+                }]
             },
             build_vendor_css: {
-                files: [
-                    {
-                        src: ['<%= vendor_files.css %>'],
-                        dest: '<%= css_build_dir %>/',
-                        cwd: '.',
-                        expand: true,
-                        flatten: true
-                    }
-                ]
+                files: [{
+                    src: ['<%= vendor_files.css %>'],
+                    dest: '<%= css_build_dir %>/',
+                    cwd: '.',
+                    expand: true,
+                    flatten: true
+                }]
             }
         },
         /**
@@ -131,11 +126,13 @@ module.exports = function (grunt) {
         'clean', 'copy:build_vendor_js', 'copy:build_vendor_css'
     ]);
 
+    grunt.registerTask('default', ['build']);
+
     /**
      * A utility function to get all app JavaScript sources.
      */
     function filterForJS(files) {
-        return files.filter(function (file) {
+        return files.filter(function(file) {
             return file.match(/\.js$/);
         });
     }
@@ -144,7 +141,7 @@ module.exports = function (grunt) {
      * A utility function to get all app CSS sources.
      */
     function filterForCSS(files) {
-        return files.filter(function (file) {
+        return files.filter(function(file) {
             return file.match(/\.css$/);
         });
     }

@@ -8,6 +8,7 @@
 <link href="/css/video-styles.css" rel="stylesheet">
 <link rel="stylesheet" href="/lib/slick.css">
 <link rel="stylesheet" href="/lib/slick-theme.css">
+<link href="/css/animate.css" rel="stylesheet">
 <link href="/css/animations.css" rel="stylesheet">
 <link href="/css/styles.css" rel="stylesheet">
 
